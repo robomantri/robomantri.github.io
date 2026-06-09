@@ -3,76 +3,534 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Krishna · robomantri</title>
+<title>KRISHNA · G1 CONTROL HUB</title>
+<meta name="description" content="Krishna (robomantri) — robotics engineer · humanoid autonomy. SLAM, navigation, teleop and VLA policies for the Unitree G1.">
 <style>
   :root {
-    --bg: #0d1117;
-    --fg: #e6edf3;
-    --muted: #8b949e;
-    --accent: #58a6ff;
+    --bg: #050a07;
+    --panel: #0a120d;
+    --panel2: #0d1810;
+    --line: #1d3a26;
+    --green: #4af626;
+    --green-dim: #2c9e1a;
+    --amber: #ffb000;
+    --red: #ff4f4f;
+    --cyan: #35d0ff;
+    --text: #b8e6c0;
+    --muted: #5d8a66;
+    --glow: 0 0 6px rgba(74, 246, 38, 0.45);
   }
-  * { box-sizing: border-box; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
   body {
-    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: "JetBrains Mono", "Fira Code", ui-monospace, "Cascadia Code", Menlo, Consolas, monospace;
+    font-size: 14px;
+    line-height: 1.55;
     min-height: 100vh;
+    overflow-x: hidden;
+  }
+  ::selection { background: var(--green); color: #03140a; }
+
+  /* ===== CRT overlay ===== */
+  .crt::before {
+    content: "";
+    position: fixed; inset: 0;
+    pointer-events: none;
+    z-index: 9000;
+    background: repeating-linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0) 0px,
+      rgba(0, 0, 0, 0) 2px,
+      rgba(0, 0, 0, 0.18) 3px
+    );
+  }
+  .crt::after {
+    content: "";
+    position: fixed; inset: 0;
+    pointer-events: none;
+    z-index: 9001;
+    background: radial-gradient(ellipse at center, transparent 58%, rgba(0, 0, 0, 0.55) 100%);
+  }
+  @keyframes flicker {
+    0%, 97%, 100% { opacity: 1; }
+    98% { opacity: 0.92; }
+    99% { opacity: 0.97; }
+  }
+  .crt { animation: flicker 7s infinite; }
+  @media (prefers-reduced-motion: reduce) {
+    .crt { animation: none; }
+    * { animation-duration: 0.001s !important; transition: none !important; }
+  }
+
+  /* ===== Boot overlay ===== */
+  #boot {
+    position: fixed; inset: 0;
+    background: var(--bg);
+    z-index: 9100;
+    padding: clamp(1rem, 6vw, 4rem);
+    font-size: clamp(11px, 2.2vw, 14px);
+    white-space: pre-wrap;
+    color: var(--green);
+    text-shadow: var(--glow);
+    cursor: pointer;
+    transition: opacity 0.6s;
+  }
+  #boot.done { opacity: 0; pointer-events: none; }
+  #boot .skip {
+    position: absolute;
+    bottom: 1rem; right: 1.5rem;
+    color: var(--muted);
+    font-size: 11px;
+    animation: blink 1.2s step-end infinite;
+  }
+  #boot .ok { color: var(--green); }
+  #boot .warn { color: var(--amber); }
+  @keyframes blink { 50% { opacity: 0; } }
+  .cursor::after { content: "█"; animation: blink 1s step-end infinite; }
+
+  /* ===== layout ===== */
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 1rem 3rem; }
+
+  header.bar {
+    position: sticky; top: 0;
+    z-index: 100;
+    background: rgba(5, 10, 7, 0.92);
+    backdrop-filter: blur(3px);
+    border-bottom: 1px solid var(--line);
+    padding: 0.5rem 1rem;
     display: flex;
     align-items: center;
-    justify-content: center;
-    background: var(--bg);
-    color: var(--fg);
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
-    padding: 2rem;
+    gap: 1rem;
+    flex-wrap: wrap;
+    font-size: 12px;
   }
-  main {
-    max-width: 640px;
-    width: 100%;
+  .bar .logo {
+    color: var(--green);
+    text-shadow: var(--glow);
+    font-weight: 700;
+    letter-spacing: 0.08em;
   }
-  h1 {
-    font-size: clamp(2rem, 5vw, 3rem);
-    margin: 0 0 0.5rem;
-    letter-spacing: -0.02em;
+  .bar .logo::before { content: "▌"; }
+  .bar .stat { color: var(--muted); }
+  .bar .stat b { color: var(--text); font-weight: 400; }
+  .bar .right { margin-left: auto; display: flex; gap: 1rem; flex-wrap: wrap; }
+  .led {
+    display: inline-block;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--green);
+    box-shadow: 0 0 8px var(--green);
+    margin-right: 0.35rem;
+    vertical-align: baseline;
+    animation: pulse 2.4s ease-in-out infinite;
   }
-  .tagline {
-    color: var(--muted);
-    font-size: 1.1rem;
-    margin: 0 0 2rem;
+  @keyframes pulse { 50% { opacity: 0.45; } }
+
+  /* ===== hero ===== */
+  .hero {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 2rem;
+    align-items: center;
+    padding: 3.5rem 0 2.5rem;
   }
-  p {
-    line-height: 1.6;
-    color: var(--fg);
+  .hero h1 {
+    font-size: clamp(1.9rem, 6vw, 3.2rem);
+    color: var(--green);
+    text-shadow: var(--glow);
+    letter-spacing: 0.12em;
   }
-  a {
-    color: var(--accent);
+  .hero .role {
+    color: var(--amber);
+    margin: 0.4rem 0 1.2rem;
+    letter-spacing: 0.06em;
+  }
+  .hero p { max-width: 56ch; color: var(--text); }
+  .hero .ids { margin-top: 1.2rem; color: var(--muted); font-size: 12px; }
+  .hero .ids a { color: var(--cyan); text-decoration: none; }
+  .hero .ids a:hover { text-decoration: underline; }
+  .botart {
+    color: var(--green-dim);
+    font-size: clamp(7px, 1.3vw, 11px);
+    line-height: 1.18;
+    white-space: pre;
+    user-select: none;
+    text-shadow: 0 0 4px rgba(74, 246, 38, 0.3);
+  }
+  @media (max-width: 720px) { .hero { grid-template-columns: 1fr; } .botart { display: none; } }
+
+  /* ===== telemetry ticker ===== */
+  .telemetry {
+    border: 1px solid var(--line);
+    background: var(--panel);
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 2.5rem;
+  }
+  .telemetry .cell {
+    flex: 1 1 140px;
+    padding: 0.7rem 1rem;
+    border-right: 1px solid var(--line);
+    min-width: 130px;
+  }
+  .telemetry .cell:last-child { border-right: none; }
+  .telemetry .k { color: var(--muted); font-size: 10px; letter-spacing: 0.12em; }
+  .telemetry .v { color: var(--green); font-size: 1.15rem; text-shadow: var(--glow); }
+  .telemetry .u { color: var(--muted); font-size: 0.75rem; }
+
+  /* ===== sections ===== */
+  h2.sec {
+    color: var(--amber);
+    font-size: 0.95rem;
+    letter-spacing: 0.18em;
+    margin: 2.5rem 0 1rem;
+  }
+  h2.sec::before { content: "── "; color: var(--line); }
+  h2.sec::after { content: " ──────────────────────────"; color: var(--line); }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+    gap: 1rem;
+  }
+  .card {
+    border: 1px solid var(--line);
+    background: var(--panel);
+    padding: 1rem;
+    position: relative;
+    transition: border-color 0.15s, transform 0.15s, box-shadow 0.15s;
+    display: block;
+    color: inherit;
     text-decoration: none;
   }
-  a:hover { text-decoration: underline; }
-  .links {
-    margin-top: 2rem;
-    display: flex;
-    gap: 1.5rem;
-    flex-wrap: wrap;
+  a.card:hover {
+    border-color: var(--green);
+    transform: translateY(-2px);
+    box-shadow: 0 0 18px rgba(74, 246, 38, 0.12);
   }
+  .card .sub { color: var(--muted); font-size: 10px; letter-spacing: 0.14em; }
+  .card h3 { color: var(--green); font-size: 1rem; margin: 0.25rem 0 0.5rem; text-shadow: var(--glow); }
+  .card p { color: var(--text); font-size: 12.5px; }
+  .card .tags { margin-top: 0.7rem; display: flex; gap: 0.4rem; flex-wrap: wrap; }
+  .card .tag {
+    border: 1px solid var(--line);
+    color: var(--muted);
+    font-size: 10px;
+    padding: 0.1rem 0.4rem;
+  }
+  .card .status {
+    position: absolute; top: 0.9rem; right: 0.9rem;
+    font-size: 10px; color: var(--green);
+  }
+  .card.classified { border-style: dashed; }
+  .card.classified h3 { color: var(--red); text-shadow: 0 0 6px rgba(255, 79, 79, 0.4); }
+  .card.classified .status { color: var(--red); }
+  .card.classified .status .led { background: var(--red); box-shadow: 0 0 8px var(--red); }
+
+  /* ===== pipeline ===== */
+  .pipeline {
+    border: 1px solid var(--line);
+    background: var(--panel);
+    padding: 1.2rem 1rem;
+    overflow-x: auto;
+  }
+  .pipeline pre {
+    color: var(--text);
+    font-size: clamp(9px, 1.6vw, 12.5px);
+    line-height: 1.5;
+  }
+  .pipeline .hot { color: var(--green); text-shadow: var(--glow); }
+  .pipeline .num { color: var(--amber); }
+
+  /* ===== feed ===== */
+  .feed {
+    border: 1px solid var(--line);
+    background: var(--panel);
+    height: 200px;
+    overflow: hidden;
+    padding: 0.6rem 1rem;
+    font-size: 11.5px;
+    position: relative;
+  }
+  .feed::after {
+    content: "";
+    position: absolute; inset: 0;
+    background: linear-gradient(to bottom, var(--panel) 0%, transparent 25%);
+    pointer-events: none;
+  }
+  .feed .line { color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .feed .line .t { color: var(--green-dim); }
+  .feed .line .topic { color: var(--cyan); }
+  .feed .line .impl { color: var(--green); }
+  .feed .line .plan { color: var(--amber); }
+
   footer {
     margin-top: 3rem;
+    border-top: 1px solid var(--line);
+    padding-top: 1.2rem;
     color: var(--muted);
-    font-size: 0.85rem;
+    font-size: 11.5px;
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
   }
+  footer a { color: var(--cyan); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
 </style>
 </head>
-<body>
-<main>
-  <h1>Krishna</h1>
-  <p class="tagline">Robotics engineer · humanoid autonomy</p>
-  <p>
-    Building navigation and learning stacks for the Unitree G1 humanoid —
-    SLAM, planning, and VLA-style policies.
-  </p>
-  <div class="links">
-    <a href="https://github.com/robomantri">GitHub</a>
+<body class="crt">
+
+<div id="boot"><span id="bootText" class="cursor"></span><span class="skip">[ PRESS ANY KEY / TAP TO SKIP BOOT ]</span></div>
+
+<header class="bar">
+  <span class="logo">ROBOMANTRI · G1 CONTROL HUB</span>
+  <span class="stat"><span class="led"></span><b>ONLINE</b></span>
+  <span class="stat">DOF <b>29/29</b></span>
+  <div class="right">
+    <span class="stat">BAT <b id="bat">87%</b></span>
+    <span class="stat">UPTIME <b id="uptime">00:00:00</b></span>
   </div>
+</header>
+
+<div class="wrap">
+
+  <section class="hero">
+    <div>
+      <h1>KRISHNA</h1>
+      <div class="role">// robotics engineer · humanoid autonomy</div>
+      <p>
+        I build the full stack between photons and motor torques on the
+        Unitree G1 humanoid — LiDAR SLAM and A* navigation, monocular
+        webcam teleop (SMPL pose → 29-DOF retargeting → whole-body control),
+        and VLA policy deployment from ONNX to TensorRT on Jetson-class
+        edge compute.
+      </p>
+      <div class="ids">
+        OPERATOR ID: <a href="https://github.com/robomantri">github.com/robomantri</a>
+        &nbsp;·&nbsp; UPLINK: <a href="mailto:krishnaguptarobotics@gmail.com">krishnaguptarobotics@gmail.com</a>
+      </div>
+    </div>
+    <div class="botart" aria-hidden="true">        ┌─◉─┐
+        │MID│  ◄ LiDAR (MID-360)
+        └─┬─┘
+      ┌──┴──┐
+      │ ◉ ◉ │  ◄ stereo head
+      └──┬──┘
+   ◉──┬──┴──┬──◉
+   │  │ G1  │  │
+   ◉  │ EDU │  ◉
+   │  └──┬──┘  │
+  ╔╧╗    │    ╔╧╗
+  ╚═╝ ┌──┴──┐ ╚═╝
+      │     │
+      ◉     ◉
+      │     │
+      ◉     ◉
+      │     │
+     ─┴─   ─┴─
+   29 DOF · 1 kHz</div>
+  </section>
+
+  <section class="telemetry" aria-label="live telemetry">
+    <div class="cell"><div class="k">POLICY DECODE</div><div class="v" id="t-dec">0.39</div><div class="u">ms / step (ORT)</div></div>
+    <div class="cell"><div class="k">ZMQ PIPE</div><div class="v" id="t-zmq">21</div><div class="u">µs unpack→pack</div></div>
+    <div class="cell"><div class="k">CHUNK HANDOVER</div><div class="v" id="t-chk">2.25</div><div class="u">ms p50</div></div>
+    <div class="cell"><div class="k">WBC LOOP</div><div class="v">30<span style="font-size:0.7em"> Hz</span></div><div class="u">motor cmd 1 kHz</div></div>
+    <div class="cell"><div class="k">POSE STREAM</div><div class="v" id="t-fps">30</div><div class="u">fps SMPL webcam</div></div>
+    <div class="cell"><div class="k">PHOTON→MOTION</div><div class="v" id="t-e2e">~130</div><div class="u">ms end-to-end</div></div>
+  </section>
+
+  <h2 class="sec">SUBSYSTEMS</h2>
+  <section class="grid">
+    <a class="card" href="https://github.com/robomantri/slam-web-v2">
+      <span class="status"><span class="led"></span>ACTIVE</span>
+      <div class="sub">SUBSYS-01 · NAVIGATION</div>
+      <h3>slam-web-v2</h3>
+      <p>G1 Control Hub — LiDAR SLAM, teleop and an A* global path planner for the Unitree G1, in one web console.</p>
+      <div class="tags"><span class="tag">SLAM</span><span class="tag">A*</span><span class="tag">FAST-LIO</span><span class="tag">WebUI</span></div>
+    </a>
+    <a class="card" href="https://github.com/robomantri/CudaRobotics">
+      <span class="status"><span class="led"></span>ACTIVE</span>
+      <div class="sub">SUBSYS-02 · COMPUTE</div>
+      <h3>CudaRobotics</h3>
+      <p>20+ CUDA-accelerated robotics algorithms in C++ — SLAM, path planning and localization on the GPU.</p>
+      <div class="tags"><span class="tag">CUDA</span><span class="tag">C++</span><span class="tag">GPU</span></div>
+    </a>
+    <a class="card" href="https://github.com/robomantri/sage">
+      <span class="status"><span class="led"></span>ACTIVE</span>
+      <div class="sub">SUBSYS-03 · SIM2REAL</div>
+      <h3>sage</h3>
+      <p>Framework for measuring sim-to-real gaps in robot joint motion — physics sim, real hardware capture, statistical analysis.</p>
+      <div class="tags"><span class="tag">MuJoCo</span><span class="tag">sim2real</span><span class="tag">analysis</span></div>
+    </a>
+    <a class="card" href="https://github.com/robomantri/livox_ros_driver2_g1">
+      <span class="status"><span class="led"></span>ACTIVE</span>
+      <div class="sub">SUBSYS-04 · PERCEPTION</div>
+      <h3>livox_ros_driver2_g1</h3>
+      <p>Livox MID-360 driver fork that rotates IMU extrinsics along with the point cloud — for upside-down LiDAR mounts on the G1.</p>
+      <div class="tags"><span class="tag">LiDAR</span><span class="tag">ROS2</span><span class="tag">IMU</span></div>
+    </a>
+    <a class="card" href="https://github.com/robomantri/nav-autonomy-deploy">
+      <span class="status"><span class="led"></span>ACTIVE</span>
+      <div class="sub">SUBSYS-05 · DEPLOY</div>
+      <h3>nav-autonomy-deploy</h3>
+      <p>Deployment configuration for a ROS 2 navigation autonomy stack on embedded robot compute.</p>
+      <div class="tags"><span class="tag">ROS2</span><span class="tag">Jetson</span><span class="tag">ops</span></div>
+    </a>
+    <div class="card classified">
+      <span class="status"><span class="led"></span>INTERNAL</span>
+      <div class="sub">SUBSYS-0X · ████████</div>
+      <h3>[ REDACTED ]</h3>
+      <p>Real-time whole-body teleoperation and VLA policy work. Telemetry says it exists. The repo disagrees — for now.</p>
+      <div class="tags"><span class="tag">VLA</span><span class="tag">teleop</span><span class="tag">WBC</span><span class="tag">█████</span></div>
+    </div>
+  </section>
+
+  <h2 class="sec">PIPELINE</h2>
+  <section class="pipeline">
+<pre>
+ photon                                                            torque
+   │                                                                  ▲
+   ▼                                                                  │
+ [webcam 30fps] ─► [SMPL pose est.] ─► [retarget → 29-DOF] ─► [WBC <span class="num">30Hz</span>] ─► [motor cmd <span class="num">1kHz</span>]
+                        <span class="hot">GPU</span>                 <span class="hot">geometry</span>           <span class="hot">MuJoCo / real</span>
+                                                                      │
+ [LiDAR MID-360] ─► [FAST-LIO SLAM] ─► [A* global plan] ──────────────┘
+                                                          end-to-end <span class="num">~130 ms</span>
+</pre>
+  </section>
+
+  <h2 class="sec">DDS FEED</h2>
+  <section class="feed" id="feed" aria-hidden="true"></section>
+
   <footer>
-    Hosted on GitHub Pages.
+    <span>© 2026 KRISHNA · transmission ends. no humanoids were harmed.</span>
+    <span>
+      <a href="https://github.com/robomantri">github</a> ·
+      <a href="mailto:krishnaguptarobotics@gmail.com">email</a> ·
+      <a href="#" id="reboot">reboot</a>
+    </span>
   </footer>
-</main>
+
+</div>
+
+<script>
+(function () {
+  /* ===== boot sequence ===== */
+  var bootLines = [
+    "UNITREE G1 EDU · ROBOMANTRI CONTROL HUB v2.9",
+    "POST  joints ............ 29/29 responding         [OK]",
+    "mount /dev/mid360 ....... LiDAR (inverted mount)   [OK]",
+    "dds   cyclonedds ........ domain 0, rt/lowstate    [OK]",
+    "slam  fast-lio .......... localization lock        [OK]",
+    "nav   a-star ............ global planner armed     [OK]",
+    "pose  smpl-webcam ....... 30 fps stream            [OK]",
+    "vla   policy ............ ONNX → TensorRT          [OK]",
+    "auth  operator .......... krishna                  [GRANTED]",
+    "",
+    "ALL SYSTEMS NOMINAL — ENTERING CONTROL HUB"
+  ];
+  var boot = document.getElementById("boot");
+  var bootText = document.getElementById("bootText");
+  var li = 0, ci = 0, killed = false;
+
+  function typeBoot() {
+    if (killed) return;
+    if (li >= bootLines.length) { setTimeout(endBoot, 450); return; }
+    var line = bootLines[li];
+    if (ci <= line.length) {
+      bootText.textContent += line.charAt(ci);
+      ci++;
+      setTimeout(typeBoot, li === 0 ? 18 : 6);
+    } else {
+      bootText.textContent += "\n";
+      li++; ci = 0;
+      setTimeout(typeBoot, li === bootLines.length - 1 ? 350 : 90);
+    }
+  }
+  function endBoot() {
+    killed = true;
+    boot.classList.add("done");
+    startClock();
+  }
+  boot.addEventListener("click", endBoot);
+  window.addEventListener("keydown", function (e) { if (!killed) endBoot(); });
+  typeBoot();
+
+  /* ===== uptime + battery ===== */
+  var t0 = Date.now(), clockStarted = false;
+  function startClock() {
+    if (clockStarted) return;
+    clockStarted = true;
+    t0 = Date.now();
+    setInterval(function () {
+      var s = Math.floor((Date.now() - t0) / 1000);
+      var hh = String(Math.floor(s / 3600)).padStart(2, "0");
+      var mm = String(Math.floor(s / 60) % 60).padStart(2, "0");
+      var ss = String(s % 60).padStart(2, "0");
+      document.getElementById("uptime").textContent = hh + ":" + mm + ":" + ss;
+    }, 1000);
+  }
+  setInterval(function () {
+    var b = 87 - Math.floor((Date.now() - t0) / 600000);
+    document.getElementById("bat").textContent = Math.max(b, 42) + "%";
+  }, 30000);
+
+  /* ===== telemetry jitter (around real measured values) ===== */
+  function jitter(id, base, spread, digits, prefix) {
+    setInterval(function () {
+      var v = base + (Math.random() - 0.5) * spread;
+      document.getElementById(id).textContent = (prefix || "") + v.toFixed(digits);
+    }, 900 + Math.random() * 600);
+  }
+  jitter("t-dec", 0.39, 0.05, 2);
+  jitter("t-zmq", 21, 4, 0);
+  jitter("t-chk", 2.25, 0.4, 2);
+  jitter("t-fps", 30, 1.4, 0);
+  setInterval(function () {
+    document.getElementById("t-e2e").textContent = "~" + Math.round(130 + (Math.random() - 0.5) * 10);
+  }, 1400);
+
+  /* ===== DDS feed ===== */
+  var feed = document.getElementById("feed");
+  var seq = 48000 + Math.floor(Math.random() * 999);
+  var feedTemplates = [
+    function () { return '<span class="topic">rt/lowstate</span> seq=' + (seq++) + ' imu_rpy=[' + r2() + ', ' + r2() + ', ' + r2() + '] ok'; },
+    function () { return '<span class="topic">rt/sportmodestate</span> vel=[' + r2() + ', ' + r2() + '] mode=BALANCED'; },
+    function () { return '<span class="topic">rt/utlidar/cloud</span> pts=' + (9000 + Math.floor(Math.random() * 2500)) + ' frame=odom'; },
+    function () { return '<span class="topic">rt/arm_sdk</span> q29 target committed, tau_ff applied'; },
+    function () { return '<span class="impl">[IMPL]</span> deployed telemetry container → NX :8090, status Up'; },
+    function () { return '<span class="plan">[PLAN]</span> recommend visitor inspect SUBSYS-02 (CudaRobotics)'; },
+    function () { return '<span class="topic">slam/odom</span> pose drift ' + (Math.random() * 0.04).toFixed(3) + ' m — within tolerance'; },
+    function () { return '<span class="impl">[IMPL]</span> chunk handover p50=2.25 ms — exact 3-tick gap @30 Hz'; },
+    function () { return '<span class="topic">nav/astar</span> replanned ' + (12 + Math.floor(Math.random() * 60)) + ' nodes in ' + (Math.random() * 3 + 0.5).toFixed(1) + ' ms'; },
+    function () { return '<span class="plan">[PLAN]</span> all benches faster than estimate. revising priors.'; },
+    function () { return '<span class="topic">teleop/smpl</span> body_params rx, conf=0.' + (88 + Math.floor(Math.random() * 11)); }
+  ];
+  function r2() { return (Math.random() * 2 - 1).toFixed(2); }
+  function ts() {
+    var d = new Date();
+    return [d.getHours(), d.getMinutes(), d.getSeconds()].map(function (x) { return String(x).padStart(2, "0"); }).join(":");
+  }
+  function pushLine() {
+    var div = document.createElement("div");
+    div.className = "line";
+    div.innerHTML = '<span class="t">[' + ts() + ']</span> ' + feedTemplates[Math.floor(Math.random() * feedTemplates.length)]();
+    feed.appendChild(div);
+    while (feed.children.length > 14) feed.removeChild(feed.firstChild);
+  }
+  for (var i = 0; i < 10; i++) pushLine();
+  setInterval(pushLine, 1100);
+
+  /* ===== reboot easter egg ===== */
+  document.getElementById("reboot").addEventListener("click", function (e) {
+    e.preventDefault();
+    location.reload();
+  });
+})();
+</script>
 </body>
 </html>
