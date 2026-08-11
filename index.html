@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Krishna Gupta — Robotics Engineer</title>
-<meta name="description" content="Krishna Gupta (robomantri) — robotics engineer building humanoid autonomy: VR teleoperation, whole-body control, conversational AI on the edge, and VLA policy deployment on the 29-DoF Unitree G1.">
+<meta name="description" content="Krishna Gupta — robotics engineer. Teleoperation, whole-body control and policy deployment on the 29-DoF Unitree G1.">
 <style>
   :root {
     --bg: #ffffff;
@@ -111,12 +111,6 @@
     border-radius: 999px; padding: 0.3rem 0.85rem;
     font-size: 0.78rem; color: var(--text-2); margin-bottom: 1.5rem;
   }
-  .status .live {
-    width: 7px; height: 7px; border-radius: 50%; background: #22c55e;
-    box-shadow: 0 0 0 3px rgba(34,197,94,0.18);
-    animation: breathe 2.4s ease-in-out infinite;
-  }
-  @keyframes breathe { 50% { opacity: 0.45; } }
   .hero h1 {
     font-size: clamp(2.3rem, 6.2vw, 4rem);
     font-weight: 780; letter-spacing: -0.032em; line-height: 1.05; max-width: 19ch;
@@ -159,19 +153,17 @@
     .metric:last-child { border-bottom: none; }
   }
 
-  /* ============ APPROACH ============ */
-  .approach { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.1rem; }
-  .ap {
-    border: 1px solid var(--border); border-radius: 14px;
-    background: var(--surface); padding: 1.4rem;
-    position: relative; overflow: hidden;
+  /* ============ APPROACH (quiet footnote, not a headline) ============ */
+  .approach {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 1.6rem 2.2rem;
+    border-top: 1px solid var(--border); padding-top: 1.6rem;
   }
-  .ap::before {
-    content: ""; position: absolute; left: 0; top: 1.4rem; bottom: 1.4rem;
-    width: 2px; background: linear-gradient(var(--accent), transparent);
+  .ap h3 {
+    font-size: 0.78rem; font-weight: 700; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--text-2); margin-bottom: 0.35rem;
   }
-  .ap h3 { font-size: 1rem; font-weight: 700; letter-spacing: -0.01em; margin-bottom: 0.45rem; }
-  .ap p { color: var(--text-2); font-size: 0.9rem; }
+  .ap p { color: var(--text-2); font-size: 0.86rem; }
 
   /* ============ SECTIONS ============ */
   section { padding: 4.5rem 0; }
@@ -448,7 +440,6 @@
   <div class="nav-inner">
     <a class="brand" href="#top"><span class="dot"></span>Krishna Gupta</a>
     <nav class="nav-links">
-      <a href="#approach">Approach</a>
       <a href="#work">Work</a>
       <a href="#experience">Experience</a>
       <a href="#skills">Skills</a>
@@ -463,13 +454,12 @@
 
   <!-- ===== HERO ===== -->
   <section class="hero">
-    <div class="status"><span class="live"></span>Robotics Engineer · Humanoid autonomy</div>
-    <h1>Turning human intent into <em>humanoid motion</em>.</h1>
+    <div class="status">Robotics Engineer</div>
+    <h1>Humanoid autonomy, <em>perception to torque</em>.</h1>
     <p class="lede">
-      I build the full stack between perception and torque on 29-DoF humanoids —
-      VR and webcam teleoperation, whole-body control, on-device conversational AI,
-      and vision-language-action policies deployed to real hardware. Mostly from
-      scratch, usually on hardware that wasn't meant to do it yet.
+      Teleoperation, whole-body control and policy deployment on the 29-DoF
+      Unitree G1 at Kayaa. Previously mobile robots and embedded systems at
+      Rigbetellabs.
     </p>
     <div class="hero-actions">
       <a class="btn primary" href="#work">Watch the demos</a>
@@ -486,37 +476,12 @@
     </div>
   </section>
 
-  <!-- ===== APPROACH ===== -->
-  <section id="approach">
-    <div class="sec-head">
-      <div class="tag">How I build</div>
-      <h2>From first principles, onto real hardware</h2>
-      <p>Most of what's on this page started as an empty repo or a bare microcontroller. I'd rather understand a system end to end than wire together things I can't debug.</p>
-    </div>
-    <div class="approach">
-      <div class="ap">
-        <h3>Built from scratch</h3>
-        <p>Teleoperation stacks, cognitive architectures, embedded firmware — designed and written from the ground up, not assembled from black boxes.</p>
-      </div>
-      <div class="ap">
-        <h3>Work around the constraint</h3>
-        <p>No encoders on the arm, so I tapped the analog potentiometer inside modified servos and read joint angles straight off it. The way through is usually one layer lower than expected.</p>
-      </div>
-      <div class="ap">
-        <h3>Proven on hardware</h3>
-        <p>Simulation is the checkpoint, never the finish line. Every pipeline here runs on a physical robot — and the footage to prove it is on this page.</p>
-      </div>
-    </div>
-  </section>
-
-  <div class="rule"></div>
-
   <!-- ===== WORK ===== -->
   <section id="work">
     <div class="sec-head">
-      <div class="tag">Selected work</div>
+      <div class="tag">Work</div>
       <h2>Simulation, then hardware</h2>
-      <p>Every pipeline below is validated twice — first in simulation, then live on the physical robot. Hardware footage is password-protected.</p>
+      <p>Hardware footage is password-protected.</p>
     </div>
 
     <form class="unlock" id="unlockBar" autocomplete="off">
@@ -530,8 +495,8 @@
 
     <div class="reel-row">
       <div class="reel-head">
-        <h3>Teleoperated imitation from a single webcam</h3>
-        <p>Monocular human pose estimation retargeted to the 29-DoF humanoid and executed through whole-body control — no motion capture suit, no markers.</p>
+        <h3>Teleoperation from a single webcam</h3>
+        <p>Monocular pose estimation retargeted to 29 DoF, executed through whole-body control. No mocap suit, no markers.</p>
       </div>
       <div>
         <div class="clip">
@@ -556,7 +521,7 @@
     <div class="reel-row">
       <div class="reel-head">
         <h3>Vision-language-action policy deployment</h3>
-        <p>GR00T N1.7 VLA fine-tuned on a new embodiment through an imitation-learning data pipeline, then exported and run on edge compute — sim-trained, hardware-proven.</p>
+        <p>GR00T N1.7 fine-tuned on a new embodiment through an imitation-learning pipeline, exported and run on edge compute.</p>
       </div>
       <div>
         <div class="clip">
@@ -591,8 +556,7 @@
             </button>
             <div class="intro" aria-hidden="true">
               <div>
-                <div class="l1">Go full screen. Turn it up.</div>
-                <div class="l2">Learned from human demonstration · replayed on hardware</div>
+                <div class="l1">Best full screen, with sound.</div>
               </div>
             </div>
             <button class="clip-btn fs-btn" type="button" aria-label="Full screen" title="Full screen">⛶</button>
@@ -601,18 +565,15 @@
           </div>
       </div>
       <div class="reel-head">
-        <h3>Custom imitation-learning choreography</h3>
+        <h3>Imitation-learning choreography</h3>
         <p>
-          A full dance sequence learned from human demonstration and replayed on the physical
-          robot. Long-horizon motion is where whole-body tracking usually falls apart — every
-          frame has to stay balanced while following a reference that never pauses, so a
-          sequence this long is the honest stress test for the retargeting and control stack.
+          A dance sequence learned from human demonstration and replayed on the robot —
+          24 seconds of continuous whole-body tracking, staying balanced against a
+          reference that never pauses.
         </p>
         <div class="notes">
           <span class="pill">24 s continuous</span>
           <span class="pill">Whole-body tracking</span>
-          <span class="pill">Balance under motion</span>
-          <span class="pill">Sound on</span>
         </div>
       </div>
     </div>
@@ -621,8 +582,8 @@
 
     <div class="reel-stage duo">
       <div class="reel-head">
-        <h3>Autonomous mobile robots and a record-and-play arm</h3>
-        <p>AMR navigation — autonomous docking and line following — alongside a record-and-play robotic arm that runs entirely on an ESP32, reading joint angles straight off the analog potentiometer inside modified servos.</p>
+        <h3>Mobile robots and a record-and-play arm</h3>
+        <p>AMR navigation — docking and line following — and an arm that records and replays trajectories entirely on an ESP32.</p>
       </div>
       <div class="reel-deck">
         <div class="reel-item">
@@ -655,7 +616,7 @@
   <section id="experience">
     <div class="sec-head">
       <div class="tag">Experience</div>
-      <h2>What I've built</h2>
+      <h2>Where I've worked</h2>
     </div>
 
     <div class="xp">
@@ -664,36 +625,34 @@
           <h3>Robotics Engineer</h3>
           <div class="co">Kayaa</div>
         </div>
-        <div class="meta">Humanoid teleoperation, robot learning &amp; embodied AI</div>
+        <div class="meta">Humanoid teleoperation &amp; robot learning</div>
       </div>
 
       <ul>
         <li>
           <p>
-            Architected the <b>VR teleoperation stack</b> on the 29-DoF Unitree G1: Quest 3 controller
-            and hand poses fused with ZED BODY_38 skeletons, GMR retargeting into
-            <b>NVIDIA SONIC whole-body control</b> — achieving <b>0.7 cm wrist accuracy</b>,
-            live-validated on hardware.
+            VR teleoperation stack for the 29-DoF Unitree G1: Quest 3 controller and hand
+            poses fused with ZED BODY_38 skeletons, GMR retargeting into NVIDIA SONIC
+            whole-body control. 0.7 cm wrist accuracy on hardware.
           </p>
         </li>
         <li>
           <p>
-            Deployed the stack on <b>Jetson AGX Orin</b> via custom SONIC/TensorRT builds, and developed a
-            <b>stereo vision return path</b> (ZED → WebRTC) streaming back to the Meta Quest headset.
+            Deployed on Jetson AGX Orin with custom SONIC and TensorRT builds, plus a stereo
+            vision return path from the ZED to the Quest over WebRTC.
           </p>
         </li>
         <li>
           <p>
-            Architected Kayaa's <b>cognitive architecture</b>, integrating <b>LLM and RAG pipelines</b>
-            for context-aware surgical assistance, and engineered and deployed an end-to-end
-            <b>TTS, LLM and STT conversational AI stack</b> running directly on the Jetson AGX Orin.
+            Cognitive architecture for context-aware surgical assistance, integrating LLM and
+            RAG pipelines, with an STT, LLM and TTS stack running on the Orin itself.
           </p>
         </li>
         <li>
           <p>
-            Own the <b>robot-learning stack</b>: an imitation-learning data pipeline for
-            <b>GR00T N1.7 VLA</b> action-space fine-tuning on a new embodiment, plus baseline
-            locomotion policies trained across <b>Isaac Sim / Isaac Gym</b> and <b>MuJoCo</b>.
+            Robot-learning stack: an imitation-learning data pipeline for GR00T N1.7
+            action-space fine-tuning on a new embodiment, and baseline locomotion policies
+            across Isaac Sim, Isaac Gym and MuJoCo.
           </p>
         </li>
       </ul>
@@ -722,33 +681,28 @@
           <h3>Robotics Engineer</h3>
           <div class="co">Rigbetellabs</div>
         </div>
-        <div class="meta">Autonomous mobile robots &amp; embedded systems</div>
+        <div class="meta">Mobile robots &amp; embedded systems</div>
       </div>
 
       <ul>
         <li>
           <p>
-            Built and deployed <b>autonomous mobile robots (AMRs)</b> — including autonomous
-            <b>docking</b> and <b>line-following</b> navigation on real hardware.
+            Autonomous mobile robots: docking and line-following navigation.
           </p>
         </li>
         <li>
           <p>
-            Built a <b>record-and-play robotic arm</b> from scratch, running entirely on an
-            <b>ESP32</b> — no host PC in the loop. With no encoders available, I modified the
-            servos and tapped their internal <b>analog potentiometer</b> directly to read joint
-            angles, turning a position-only actuator into a teach-by-demonstration joint.
+            A record-and-play arm running entirely on an ESP32. With no encoders available,
+            I modified the servos to tap their internal potentiometer for joint feedback,
+            which made position-only actuators readable enough to teach by demonstration.
           </p>
         </li>
       </ul>
 
       <div class="stack">
         <span class="pill">AMR</span>
-        <span class="pill">Autonomous docking</span>
-        <span class="pill">Line following</span>
         <span class="pill">ESP32</span>
         <span class="pill">Embedded C</span>
-        <span class="pill">Servo feedback</span>
         <span class="pill">ROS</span>
       </div>
     </div>
@@ -759,56 +713,57 @@
   <!-- ===== SKILLS ===== -->
   <section id="skills">
     <div class="sec-head">
-      <div class="tag">Capabilities</div>
-      <h2>Tools &amp; domains</h2>
+      <div class="tag">Skills</div>
+      <h2>Tools</h2>
     </div>
     <div class="skills">
       <div class="skill">
-        <h3>Teleoperation &amp; Control</h3>
+        <h3>Control &amp; teleoperation</h3>
         <div class="pills">
           <span class="pill">Whole-body control</span><span class="pill">NVIDIA SONIC</span>
-          <span class="pill">Motion retargeting</span><span class="pill">VR teleop</span>
-          <span class="pill">Quest 3</span>
+          <span class="pill">Motion retargeting</span><span class="pill">Quest 3</span>
         </div>
       </div>
       <div class="skill">
-        <h3>Robot Learning</h3>
+        <h3>Learning</h3>
         <div class="pills">
-          <span class="pill">GR00T N1.7 VLA</span><span class="pill">Imitation learning</span>
+          <span class="pill">GR00T N1.7</span><span class="pill">Imitation learning</span>
           <span class="pill">Isaac Sim / Gym</span><span class="pill">MuJoCo</span>
-          <span class="pill">Sim2real</span>
+          <span class="pill">LLM / RAG</span><span class="pill">STT / TTS</span>
         </div>
       </div>
       <div class="skill">
-        <h3>Embodied &amp; Conversational AI</h3>
-        <div class="pills">
-          <span class="pill">LLM pipelines</span><span class="pill">RAG</span>
-          <span class="pill">STT / TTS</span><span class="pill">On-device inference</span>
-        </div>
-      </div>
-      <div class="skill">
-        <h3>Perception &amp; Navigation</h3>
+        <h3>Perception &amp; navigation</h3>
         <div class="pills">
           <span class="pill">LiDAR SLAM</span><span class="pill">FAST-LIO</span>
-          <span class="pill">ZED stereo</span><span class="pill">Pose estimation</span>
-          <span class="pill">A* planning</span><span class="pill">ROS 2</span>
+          <span class="pill">ZED stereo</span><span class="pill">ROS 2</span>
         </div>
       </div>
       <div class="skill">
-        <h3>Embedded Systems</h3>
-        <div class="pills">
-          <span class="pill">ESP32</span><span class="pill">Embedded C</span>
-          <span class="pill">Servo &amp; motor control</span><span class="pill">Sensor interfacing</span>
-        </div>
-      </div>
-      <div class="skill">
-        <h3>Systems &amp; Deployment</h3>
+        <h3>Systems</h3>
         <div class="pills">
           <span class="pill">C++</span><span class="pill">Python</span>
           <span class="pill">CUDA</span><span class="pill">TensorRT</span>
-          <span class="pill">ONNX</span><span class="pill">Jetson</span>
-          <span class="pill">WebRTC</span>
+          <span class="pill">Jetson</span><span class="pill">ESP32</span>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== APPROACH (footnote) ===== -->
+  <section id="approach" style="padding-top: 0;">
+    <div class="approach">
+      <div class="ap">
+        <h3>From scratch</h3>
+        <p>Teleoperation stacks, cognitive architectures and firmware written from the ground up rather than assembled from parts I can't debug.</p>
+      </div>
+      <div class="ap">
+        <h3>One layer lower</h3>
+        <p>The arm had no encoders, so the joint feedback came off the potentiometer inside the servo. The way through is usually a layer below where you're looking.</p>
+      </div>
+      <div class="ap">
+        <h3>On hardware</h3>
+        <p>Simulation is a checkpoint. Everything here runs on a physical robot, and the footage is on this page.</p>
       </div>
     </div>
   </section>
@@ -816,8 +771,8 @@
   <!-- ===== CONTACT ===== -->
   <section id="contact">
     <div class="contact">
-      <h2>Let's build something that moves.</h2>
-      <p>Open to robotics engineering roles and collaborations in humanoid autonomy, teleoperation and robot learning.</p>
+      <h2>Get in touch</h2>
+      <p>Open to robotics roles and collaborations.</p>
       <div class="btns">
         <a class="btn primary" href="mailto:krishnaguptarobotics@gmail.com">krishnaguptarobotics@gmail.com</a>
         <a class="btn ghost" href="resume.pdf" target="_blank" rel="noopener">Resume ↗</a>
