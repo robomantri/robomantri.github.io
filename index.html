@@ -3,23 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="dark light">
+<meta name="theme-color" content="#090a0e">
 <title>Krishna Gupta — Robotics Engineer</title>
 <meta name="description" content="Krishna Gupta — robotics engineer. Teleoperation, whole-body control and policy deployment on the 29-DoF Unitree G1.">
 <style>
+  /* dark is the default; light only applies when explicitly chosen */
   :root {
-    --bg: #ffffff;
-    --surface: #ffffff;
-    --surface-2: #f7f8fa;
-    --text: #14161b;
-    --text-2: #565d6b;
-    --border: #e4e7ec;
-    --accent: #3b39c9;
-    --accent-2: #6d6bf0;
-    --ring: rgba(59,57,201,0.14);
-    --shadow-sm: 0 1px 2px rgba(20,22,27,0.05);
-    --shadow-lg: 0 12px 40px rgba(20,22,27,0.09);
-  }
-  :root[data-theme="dark"] {
     --bg: #090a0e;
     --surface: #101218;
     --surface-2: #14171f;
@@ -32,20 +22,18 @@
     --shadow-sm: 0 1px 2px rgba(0,0,0,0.4);
     --shadow-lg: 0 12px 40px rgba(0,0,0,0.5);
   }
-  @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) {
-      --bg: #090a0e;
-      --surface: #101218;
-      --surface-2: #14171f;
-      --text: #eceef2;
-      --text-2: #969cab;
-      --border: #232733;
-      --accent: #8b8cf7;
-      --accent-2: #a5a4ff;
-      --ring: rgba(139,140,247,0.18);
-      --shadow-sm: 0 1px 2px rgba(0,0,0,0.4);
-      --shadow-lg: 0 12px 40px rgba(0,0,0,0.5);
-    }
+  :root[data-theme="light"] {
+    --bg: #ffffff;
+    --surface: #ffffff;
+    --surface-2: #f7f8fa;
+    --text: #14161b;
+    --text-2: #565d6b;
+    --border: #e4e7ec;
+    --accent: #3b39c9;
+    --accent-2: #6d6bf0;
+    --ring: rgba(59,57,201,0.14);
+    --shadow-sm: 0 1px 2px rgba(20,22,27,0.05);
+    --shadow-lg: 0 12px 40px rgba(20,22,27,0.09);
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -141,12 +129,8 @@
     -webkit-mask-image: linear-gradient(to bottom, #000 68%, transparent 99%);
     mask-image: linear-gradient(to bottom, #000 68%, transparent 99%);
   }
-  /* the render is near-black; lift it off a light background */
-  :root:not([data-theme="dark"]) .hero-media img { filter: drop-shadow(0 18px 45px rgba(20,22,27,0.22)); }
-  @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) .hero-media img { filter: none; }
-  }
-  :root[data-theme="dark"] .hero-media img { filter: none; }
+  /* the render is near-black; lift it off the light background only */
+  :root[data-theme="light"] .hero-media img { filter: drop-shadow(0 18px 45px rgba(20,22,27,0.22)); }
   @media (max-width: 900px) {
     .hero-grid { grid-template-columns: 1fr; gap: 2rem; }
     .hero-media { display: none; }
@@ -524,7 +508,7 @@
         <h1>Humanoid autonomy, <em>perception to torque</em>.</h1>
         <p class="lede">
           Simulation, teleoperation and policy deployment on the 29-DoF Unitree G1
-          at Kayaa — trained in Isaac Sim and MuJoCo, validated on hardware.
+          at SS Innovations — trained in Isaac Sim and MuJoCo, validated on hardware.
           Previously mobile robots and embedded systems at Rigbetellabs.
         </p>
         <div class="hero-actions">
@@ -570,7 +554,7 @@
       <button class="btn primary" type="submit" id="unlockBtn">Unlock</button>
     </form>
 
-    <div class="group-head"><h3>Humanoid autonomy · Kayaa</h3><span class="ln"></span></div>
+    <div class="group-head"><h3>Kayaa · humanoid autonomy</h3><span class="ln"></span></div>
 
     <div class="reel-row">
       <div class="reel-head">
@@ -701,18 +685,19 @@
     <div class="xp">
       <div class="xp-top">
         <div>
-          <h3>Robotics Engineer</h3>
-          <div class="co">Kayaa</div>
+          <h3>Mechatronics Engineer, Robotics R&amp;D</h3>
+          <div class="co">SS Innovations Private Limited — Gurugram</div>
         </div>
-        <div class="meta">Humanoid teleoperation &amp; robot learning</div>
+        <div class="meta">Surgical robotics · humanoid teleoperation &amp; robot learning</div>
       </div>
 
       <ul>
         <li>
           <p>
-            VR teleoperation stack for the 29-DoF Unitree G1: Quest 3 controller and hand
-            poses fused with ZED BODY_38 skeletons, GMR retargeting into NVIDIA SONIC
-            whole-body control. 0.7 cm wrist accuracy on hardware.
+            VR teleoperation stack for Kayaa, the 29-DoF Unitree G1 humanoid I work on:
+            Quest 3 controller and hand poses fused with ZED BODY_38 skeletons, GMR
+            retargeting into NVIDIA SONIC whole-body control. 0.7 cm wrist accuracy on
+            hardware.
           </p>
         </li>
         <li>
@@ -895,9 +880,7 @@
   var stored = localStorage.getItem("theme");
   if (stored) root.setAttribute("data-theme", stored);
   function currentTheme() {
-    var a = root.getAttribute("data-theme");
-    if (a) return a;
-    return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    return root.getAttribute("data-theme") || "dark";
   }
   toggle.addEventListener("click", function () {
     var next = currentTheme() === "dark" ? "light" : "dark";
