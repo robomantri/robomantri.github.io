@@ -186,6 +186,23 @@
   }
   .ap p { color: var(--text-2); font-size: 0.86rem; }
 
+  /* ============ PULL QUOTE ============ */
+  .quote {
+    border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+    padding: 3.2rem 1.5rem; margin: 1rem 0;
+    text-align: center;
+  }
+  .quote p {
+    font-size: clamp(1.15rem, 2.6vw, 1.6rem);
+    font-weight: 500; line-height: 1.45; letter-spacing: -0.015em;
+    max-width: 30ch; margin: 0 auto; color: var(--text);
+  }
+  .quote p em {
+    font-style: normal;
+    background: linear-gradient(100deg, var(--accent), var(--accent-2));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+
   /* ============ SECTIONS ============ */
   section { padding: 4.5rem 0; }
   .sec-head { margin-bottom: 2rem; max-width: 62ch; }
@@ -507,6 +524,11 @@
     </div>
   </section>
 
+  <!-- ===== PULL QUOTE ===== -->
+  <blockquote class="quote">
+    <p>In a world of probabilistic models, I try to engineer <em>deterministic machines</em>.</p>
+  </blockquote>
+
   <!-- ===== WORK ===== -->
   <section id="work">
     <div class="sec-head">
@@ -551,8 +573,8 @@
 
     <div class="reel-row">
       <div class="reel-head">
-        <h3>Vision-language-action policy deployment</h3>
-        <p>GR00T N1.7 fine-tuned on a new embodiment through an imitation-learning pipeline, exported and run on edge compute.</p>
+        <h3>Vision-language-action policy: instrument transport</h3>
+        <p>GR00T N1.6 fine-tuned for surgical instrument transport in NVIDIA's Isaac for Healthcare Rheo workflow — the G1 grasps a cart handle and moves a loaded sterile tray to the surgical table. Simulation workflow only, not for clinical use.</p>
       </div>
       <div>
         <div class="clip">
