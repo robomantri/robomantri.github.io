@@ -441,6 +441,19 @@
   }
   .skill .pills { display: flex; flex-wrap: wrap; gap: 0.4rem; }
 
+  /* ============ TEAM ============ */
+  .team { text-align: center; }
+  .team-frame {
+    border: 1px solid var(--border); border-radius: 16px;
+    background: var(--surface); padding: 0.75rem;
+    box-shadow: var(--shadow-lg); overflow: hidden;
+  }
+  .team-frame img { width: 100%; height: auto; border-radius: 10px; }
+  .team .cap {
+    color: var(--text-2); font-size: 0.9rem;
+    margin: 1.1rem auto 0; max-width: 52ch;
+  }
+
   /* ============ CONTACT ============ */
   .contact {
     border: 1px solid var(--border); border-radius: 18px;
@@ -526,7 +539,7 @@
 
   <!-- ===== PULL QUOTE ===== -->
   <blockquote class="quote">
-    <p>In a world of probabilistic models, I try to engineer <em>deterministic machines</em>.</p>
+    <p>&ldquo;In a world of probabilistic models, I try to engineer <em>deterministic machines</em>.&rdquo;</p>
   </blockquote>
 
   <!-- ===== WORK ===== -->
@@ -827,6 +840,18 @@
         <p>Simulation is a checkpoint. Everything here runs on a physical robot, and the footage is on this page.</p>
       </div>
     </div>
+  </section>
+
+  <!-- ===== TEAM ===== -->
+  <section class="team">
+    <div class="team-frame">
+      <picture>
+        <source srcset="team.webp" type="image/webp">
+        <img src="team.jpg" alt="Illustration of the humanoid robotics team working together in the lab"
+             width="1500" height="844" loading="lazy" decoding="async">
+      </picture>
+    </div>
+    <p class="cap">None of this was solo work. Thanks to the team I built it with.</p>
   </section>
 
   <!-- ===== CONTACT ===== -->
