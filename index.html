@@ -289,16 +289,60 @@
   }
   .clip.revealing video { animation: reelReveal 2s cubic-bezier(0.22, 0.61, 0.36, 1) both; }
 
-  .sound-btn {
-    position: absolute; z-index: 4; right: 0.6rem; bottom: 0.6rem;
+  .clip-btn {
+    position: absolute; z-index: 6; bottom: 0.6rem;
     width: 38px; height: 38px; border-radius: 50%;
     display: none; place-items: center; cursor: pointer;
     background: rgba(5,6,10,0.66); backdrop-filter: blur(6px);
     border: 1px solid rgba(255,255,255,0.18); color: #f2f3f7; font-size: 1rem;
     transition: transform 0.14s, background 0.16s;
   }
-  .sound-btn:hover { transform: scale(1.08); background: rgba(5,6,10,0.85); }
-  .clip.unlocked .sound-btn.on { display: grid; }
+  .clip-btn:hover { transform: scale(1.08); background: rgba(5,6,10,0.85); }
+  .sound-btn { right: 0.6rem; }
+  .fs-btn { right: 3.2rem; }
+  .clip.playing .clip-btn { display: grid; }
+
+  /* big play button -- the reel never starts on its own */
+  .play-btn {
+    position: absolute; inset: 0; z-index: 5;
+    display: none; flex-direction: column; align-items: center; justify-content: center;
+    gap: 0.6rem; cursor: pointer; border: none; font-family: inherit;
+    background: rgba(5,6,10,0.45); backdrop-filter: blur(2px);
+    color: #f2f3f7; width: 100%; transition: background 0.2s;
+  }
+  .clip.ready .play-btn { display: flex; }
+  .play-btn:hover { background: rgba(5,6,10,0.32); }
+  .play-btn .disc {
+    width: 66px; height: 66px; border-radius: 50%;
+    display: grid; place-items: center;
+    background: rgba(255,255,255,0.14); backdrop-filter: blur(8px);
+    border: 1.5px solid rgba(255,255,255,0.55);
+    font-size: 1.5rem; padding-left: 5px;
+    transition: transform 0.16s, background 0.16s;
+  }
+  .play-btn:hover .disc { transform: scale(1.07); background: rgba(255,255,255,0.24); }
+  .play-btn .hint {
+    font-size: 0.78rem; letter-spacing: 0.04em;
+    color: rgba(242,243,247,0.88); text-shadow: 0 1px 6px rgba(0,0,0,0.7);
+  }
+
+  /* 2s black title card before the reel starts */
+  .intro {
+    position: absolute; inset: 0; z-index: 7;
+    display: grid; place-items: center; text-align: center; padding: 1.2rem;
+    background: #000; opacity: 0; pointer-events: none;
+    transition: opacity 0.45s ease;
+  }
+  .clip.intro-on .intro { opacity: 1; }
+  .intro .l1 {
+    color: #fff; font-size: 0.95rem; font-weight: 680; letter-spacing: 0.01em;
+    opacity: 0; animation: introIn 0.6s ease-out 0.15s both;
+  }
+  .intro .l2 {
+    color: rgba(255,255,255,0.62); font-size: 0.8rem; margin-top: 0.4rem;
+    opacity: 0; animation: introIn 0.6s ease-out 0.5s both;
+  }
+  @keyframes introIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
 
   @media (max-width: 720px) { .reel-row { grid-template-columns: 1fr; } }
 
@@ -509,12 +553,23 @@
       </div>
       <div class="reel-deck">
         <div class="reel-item">
-          <div class="clip locked" style="--ar: 576/1024" data-enc="videos/imitation-dance.mp4.enc" data-reveal="1" data-audio="1">
+          <div class="clip locked" style="--ar: 576/1024" data-enc="videos/imitation-dance.mp4.enc" data-manual="1">
             <img class="preview" alt="" aria-hidden="true"
                  src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAwICQsJCAwLCgsODQwOEh4UEhEREiUbHBYeLCcuLisnKyoxN0Y7MTRCNCorPVM+QkhKTk9OLztWXFVMW0ZNTkv/2wBDAQ0ODhIQEiQUFCRLMisyS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0v/wAARCABVADADASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDiEhJ6VYFo5GcGrkUKhu1XeVTGBUgY32cilEZQ5rWjtWmbjvTL2xa3Xc1K4LUz/tLkbRUDxu5yRVuwiEsxyOM1sGxTHApg9CnY2Dbt7vwKvXNuGj+9gCqcjyJBlTUkLNMgVm5NOwPUY8jWygwksaLq6kuIf3o7VO9sYYWZsVVhAnBLuMUtWCVipp84SUqRjJroIixizVSPTLYp5qvkilS/CDYF4FOwnqYqasoARjkU6TVY0IKnBFZMdmJMfNV9NPtxGNzZar0sMbdazJOmwMcGks0mEZbnBrXh0OGSNXiIPrWtDobBFBZdvpUtpAYFnqAhiZZDTJLrIJGMVo6toaPIqQsAc81W1XRxBbxqjc45pMasR2+iTc5OKeujrG2ZZ+PrUJvriTq5FKpZ/vMTQm0Dd9WacF3b2MZWMljVJ9Xumn3BiE9Kj2A9qPKHegRHLeTST7wx607UbqWdE2scgVE0iB9tMMgJxQAIKsR4FU1kqQPQBdBpGbiq4l4pDLQArQqW3d6rGPa5OalaWoHl5oAYpp4Y0UUAOyaCaKKAI3Y1AxNFFAH/2Q==">
             <video muted loop playsinline preload="none" controlslist="nodownload" disablepictureinpicture></video>
             <span class="label real">Real robot</span>
-            <button class="sound-btn" type="button" aria-label="Toggle sound" title="Toggle sound">🔊</button>
+            <button class="play-btn" type="button" aria-label="Play with sound">
+              <span class="disc" aria-hidden="true">▶</span>
+              <span class="hint">Play with sound</span>
+            </button>
+            <div class="intro" aria-hidden="true">
+              <div>
+                <div class="l1">Go full screen. Turn it up.</div>
+                <div class="l2">Learned from human demonstration · replayed on hardware</div>
+              </div>
+            </div>
+            <button class="clip-btn fs-btn" type="button" aria-label="Full screen" title="Full screen">⛶</button>
+            <button class="clip-btn sound-btn" type="button" aria-label="Toggle sound" title="Toggle sound">🔊</button>
             <div class="veil"><div class="lockico">🔒</div><div class="t">Hardware footage</div><div class="s">Password required</div></div>
           </div>
         </div>
@@ -762,12 +817,11 @@
       entries.forEach(function (e) {
         var v = e.target;
         if (!v.src) return;
-        if (e.isIntersecting) {
-          var p = v.play();
-          if (p) p.catch(function () {});
-        } else {
-          v.pause();
-        }
+        if (!e.isIntersecting) { v.pause(); return; }
+        /* manual reels only ever start from their own play button */
+        if (v.closest(".clip").dataset.manual) return;
+        var p = v.play();
+        if (p) p.catch(function () {});
       });
     }, { threshold: 0.25 });
     document.querySelectorAll(".clip video").forEach(function (v) { io.observe(v); });
@@ -778,12 +832,48 @@
     c.addEventListener("contextmenu", function (e) { e.preventDefault(); });
   });
 
-  /* ---------- sound toggles ---------- */
+  /* ---------- sound + fullscreen toggles ---------- */
   document.querySelectorAll(".sound-btn").forEach(function (b) {
     b.addEventListener("click", function () {
       var v = b.parentElement.querySelector("video");
       v.muted = !v.muted;
       b.textContent = v.muted ? "🔇" : "🔊";
+    });
+  });
+  document.querySelectorAll(".fs-btn").forEach(function (b) {
+    b.addEventListener("click", function () {
+      var clip = b.parentElement;
+      var v = clip.querySelector("video");
+      if (document.fullscreenElement) { document.exitFullscreen(); return; }
+      var go = clip.requestFullscreen || v.webkitEnterFullscreen;
+      if (clip.requestFullscreen) clip.requestFullscreen().catch(function () {});
+      else if (v.webkitEnterFullscreen) v.webkitEnterFullscreen();
+    });
+  });
+
+  /* ---------- manual reels: 2s title card, then play with sound ---------- */
+  document.querySelectorAll(".clip[data-manual] .play-btn").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      var clip = btn.closest(".clip");
+      var video = clip.querySelector("video");
+
+      clip.classList.remove("ready");
+      clip.classList.add("intro-on");
+
+      setTimeout(function () {
+        clip.classList.remove("intro-on");
+        clip.classList.add("playing", "revealing");
+        video.muted = false;
+        video.volume = 1;
+        video.currentTime = 0;
+        video.play().catch(function () {
+          /* audio refused -- start muted and let them unmute */
+          video.muted = true;
+          var sb = clip.querySelector(".sound-btn");
+          if (sb) sb.textContent = "🔇";
+          video.play().catch(function () {});
+        });
+      }, 2000);
     });
   });
 
@@ -839,22 +929,13 @@
         video.setAttribute("controls", "");
         clip.classList.remove("locked", "working");
         clip.classList.add("unlocked");
-        if (clip.dataset.reveal) clip.classList.add("revealing");
 
-        /* the unlock click counts as a user gesture, so sound is allowed here */
-        if (clip.dataset.audio) {
-          var sb = clip.querySelector(".sound-btn");
-          video.muted = false;
-          video.volume = 1;
-          if (sb) { sb.classList.add("on"); sb.textContent = "🔊"; }
-          video.play().catch(function () {
-            /* browser refused audio -- fall back to muted and let them opt in */
-            video.muted = true;
-            if (sb) sb.textContent = "🔇";
-            video.play().catch(function () {});
-          });
+        if (clip.dataset.manual) {
+          /* never starts on its own -- wait for the play button */
+          clip.classList.add("ready");
+        } else if (io) {
+          io.observe(video);
         }
-        if (io) io.observe(video);
       });
   }
 
