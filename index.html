@@ -3,838 +3,713 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>KRISHNA · G1 CONTROL HUB</title>
-<meta name="description" content="Krishna (robomantri) — robotics engineer · humanoid autonomy. SLAM, navigation, teleop and VLA policies for the Unitree G1.">
+<title>Krishna Gupta — Robotics Engineer</title>
+<meta name="description" content="Krishna Gupta (robomantri) — robotics engineer building humanoid autonomy: VR teleoperation, whole-body control and VLA policy deployment on the 29-DoF Unitree G1.">
 <style>
   :root {
-    --bg: #050a07;
-    --panel: #0a120d;
-    --panel2: #0d1810;
-    --line: #1d3a26;
-    --green: #4af626;
-    --green-dim: #2c9e1a;
-    --amber: #ffb000;
-    --red: #ff4f4f;
-    --cyan: #35d0ff;
-    --text: #b8e6c0;
-    --muted: #5d8a66;
-    --glow: 0 0 6px rgba(74, 246, 38, 0.45);
+    --bg: #ffffff;
+    --surface: #ffffff;
+    --surface-2: #f7f8fa;
+    --text: #14161b;
+    --text-2: #565d6b;
+    --border: #e4e7ec;
+    --accent: #3b39c9;
+    --accent-2: #6d6bf0;
+    --ring: rgba(59,57,201,0.14);
+    --shadow-sm: 0 1px 2px rgba(20,22,27,0.05);
+    --shadow-lg: 0 12px 40px rgba(20,22,27,0.09);
   }
+  :root[data-theme="dark"] {
+    --bg: #090a0e;
+    --surface: #101218;
+    --surface-2: #14171f;
+    --text: #eceef2;
+    --text-2: #969cab;
+    --border: #232733;
+    --accent: #8b8cf7;
+    --accent-2: #a5a4ff;
+    --ring: rgba(139,140,247,0.18);
+    --shadow-sm: 0 1px 2px rgba(0,0,0,0.4);
+    --shadow-lg: 0 12px 40px rgba(0,0,0,0.5);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #090a0e;
+      --surface: #101218;
+      --surface-2: #14171f;
+      --text: #eceef2;
+      --text-2: #969cab;
+      --border: #232733;
+      --accent: #8b8cf7;
+      --accent-2: #a5a4ff;
+      --ring: rgba(139,140,247,0.18);
+      --shadow-sm: 0 1px 2px rgba(0,0,0,0.4);
+      --shadow-lg: 0 12px 40px rgba(0,0,0,0.5);
+    }
+  }
+
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html { scroll-behavior: smooth; }
   body {
     background: var(--bg);
     color: var(--text);
-    font-family: "JetBrains Mono", "Fira Code", ui-monospace, "Cascadia Code", Menlo, Consolas, monospace;
-    font-size: 14px;
-    line-height: 1.55;
-    min-height: 100vh;
+    font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.62;
+    -webkit-font-smoothing: antialiased;
     overflow-x: hidden;
   }
-  ::selection { background: var(--green); color: #03140a; }
+  img, video, svg { display: block; max-width: 100%; }
+  a { color: inherit; }
+  ::selection { background: var(--ring); }
 
-  /* ===== CRT overlay ===== */
-  .crt::before {
-    content: "";
-    position: fixed; inset: 0;
-    pointer-events: none;
-    z-index: 9000;
-    background: repeating-linear-gradient(
-      to bottom,
-      rgba(0, 0, 0, 0) 0px,
-      rgba(0, 0, 0, 0) 2px,
-      rgba(0, 0, 0, 0.18) 3px
-    );
-  }
-  .crt::after {
-    content: "";
-    position: fixed; inset: 0;
-    pointer-events: none;
-    z-index: 9001;
-    background: radial-gradient(ellipse at center, transparent 58%, rgba(0, 0, 0, 0.55) 100%);
-  }
-  @keyframes flicker {
-    0%, 97%, 100% { opacity: 1; }
-    98% { opacity: 0.92; }
-    99% { opacity: 0.97; }
-  }
-  .crt { animation: flicker 7s infinite; }
-  @media (prefers-reduced-motion: reduce) {
-    .crt { animation: none; }
-    * { animation-duration: 0.001s !important; transition: none !important; }
-  }
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 0 1.5rem; }
 
-  /* ===== LiDAR sweep background ===== */
-  #lidar {
-    position: fixed; inset: 0;
-    width: 100vw; height: 100vh;
-    z-index: 0;
-    pointer-events: none;
-    opacity: 0.55;
+  /* ============ NAV ============ */
+  header.nav {
+    position: sticky; top: 0; z-index: 100;
+    background: color-mix(in srgb, var(--bg) 82%, transparent);
+    backdrop-filter: saturate(180%) blur(12px);
+    border-bottom: 1px solid var(--border);
   }
-  header.bar, .wrap { position: relative; z-index: 1; }
+  .nav-inner {
+    max-width: 1120px; margin: 0 auto; padding: 0 1.5rem;
+    height: 62px; display: flex; align-items: center; gap: 1.75rem;
+  }
+  .brand {
+    font-weight: 700; font-size: 1rem; letter-spacing: -0.015em;
+    text-decoration: none; display: flex; align-items: center; gap: 0.55rem;
+  }
+  .brand .dot {
+    width: 9px; height: 9px; border-radius: 50%;
+    background: var(--accent); box-shadow: 0 0 0 4px var(--ring);
+  }
+  .nav-links { display: flex; gap: 1.6rem; margin-left: auto; font-size: 0.9rem; }
+  .nav-links a { text-decoration: none; color: var(--text-2); transition: color 0.16s; }
+  .nav-links a:hover { color: var(--text); }
+  .theme-toggle {
+    margin-left: 0.25rem;
+    border: 1px solid var(--border); background: var(--surface); color: var(--text);
+    width: 34px; height: 34px; border-radius: 9px;
+    display: grid; place-items: center; cursor: pointer;
+    font-size: 0.95rem; transition: border-color 0.16s, background 0.16s;
+  }
+  .theme-toggle:hover { border-color: var(--accent); background: var(--surface-2); }
+  @media (max-width: 720px) { .nav-links { gap: 1rem; font-size: 0.82rem; } .nav-links a:nth-child(n+4) { display: none; } }
 
-  /* ===== red alert (manual override) mode ===== */
-  body.alert {
-    --green: #ff5252;
-    --green-dim: #a33636;
-    --amber: #ffd000;
-    --cyan: #ff9d9d;
-    --text: #f0bcbc;
-    --muted: #9a5d5d;
-    --line: #3a1d1d;
-    --panel: #120808;
-    --panel2: #1a0c0c;
-    --glow: 0 0 8px rgba(255, 82, 82, 0.55);
+  /* ============ HERO ============ */
+  .hero { padding: 5rem 0 3rem; position: relative; }
+  .hero::before {
+    content: ""; position: absolute; top: -120px; left: 50%;
+    transform: translateX(-50%);
+    width: 900px; height: 420px; pointer-events: none; z-index: -1;
+    background: radial-gradient(ellipse at center, var(--ring), transparent 68%);
+    filter: blur(20px);
   }
-  body.alert .crt-tint {
-    position: fixed; inset: 0;
-    z-index: 8990;
-    pointer-events: none;
-    background: rgba(255, 30, 30, 0.05);
-    animation: alertThrob 1.1s ease-in-out infinite;
+  .status {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    border: 1px solid var(--border); background: var(--surface);
+    border-radius: 999px; padding: 0.3rem 0.85rem;
+    font-size: 0.78rem; color: var(--text-2); margin-bottom: 1.5rem;
   }
-  @keyframes alertThrob { 50% { background: rgba(255, 30, 30, 0.12); } }
-
-  /* ===== hidden console ===== */
-  #console {
-    position: fixed;
-    left: 0; right: 0; bottom: 0;
-    z-index: 9050;
-    background: rgba(4, 9, 6, 0.97);
-    border-top: 1px solid var(--green);
-    box-shadow: 0 -4px 30px rgba(74, 246, 38, 0.15);
-    height: 0;
-    overflow: hidden;
-    transition: height 0.18s ease-out;
-    font-size: 12.5px;
+  .status .live {
+    width: 7px; height: 7px; border-radius: 50%; background: #22c55e;
+    box-shadow: 0 0 0 3px rgba(34,197,94,0.18);
+    animation: breathe 2.4s ease-in-out infinite;
   }
-  #console.open { height: 290px; }
-  #console .cbody {
-    height: 250px;
-    overflow-y: auto;
-    padding: 0.7rem 1rem 0;
-    white-space: pre-wrap;
-    color: var(--text);
-  }
-  #console .cbody .sys { color: var(--muted); }
-  #console .cbody .err { color: var(--red); }
-  #console .cbody .hi { color: var(--green); text-shadow: var(--glow); }
-  #console .cline {
-    display: flex;
-    padding: 0.3rem 1rem 0.6rem;
-    gap: 0.5rem;
-  }
-  #console .prompt { color: var(--green); text-shadow: var(--glow); }
-  #console input {
-    flex: 1;
-    background: none;
-    border: none;
-    outline: none;
-    color: var(--text);
-    font: inherit;
-    caret-color: var(--green);
-  }
-  .conhint {
-    position: fixed;
-    bottom: 0.5rem; left: 0.8rem;
-    z-index: 90;
-    color: var(--muted);
-    font-size: 10px;
-    opacity: 0.7;
-    cursor: pointer;
-  }
-  .conhint:hover { color: var(--green); opacity: 1; }
-
-  /* ===== Boot overlay ===== */
-  #boot {
-    position: fixed; inset: 0;
-    background: var(--bg);
-    z-index: 9100;
-    padding: clamp(1rem, 6vw, 4rem);
-    font-size: clamp(11px, 2.2vw, 14px);
-    white-space: pre-wrap;
-    color: var(--green);
-    text-shadow: var(--glow);
-    cursor: pointer;
-    transition: opacity 0.6s;
-  }
-  #boot.done { opacity: 0; pointer-events: none; }
-  #boot .skip {
-    position: absolute;
-    bottom: 1rem; right: 1.5rem;
-    color: var(--muted);
-    font-size: 11px;
-    animation: blink 1.2s step-end infinite;
-  }
-  #boot .ok { color: var(--green); }
-  #boot .warn { color: var(--amber); }
-  @keyframes blink { 50% { opacity: 0; } }
-  .cursor::after { content: "█"; animation: blink 1s step-end infinite; }
-
-  /* ===== layout ===== */
-  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 1rem 3rem; }
-
-  header.bar {
-    position: sticky; top: 0;
-    z-index: 100;
-    background: rgba(5, 10, 7, 0.92);
-    backdrop-filter: blur(3px);
-    border-bottom: 1px solid var(--line);
-    padding: 0.5rem 1rem;
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    flex-wrap: wrap;
-    font-size: 12px;
-  }
-  .bar .logo {
-    color: var(--green);
-    text-shadow: var(--glow);
-    font-weight: 700;
-    letter-spacing: 0.08em;
-  }
-  .bar .logo::before { content: "▌"; }
-  .bar .stat { color: var(--muted); }
-  .bar .stat b { color: var(--text); font-weight: 400; }
-  .bar .right { margin-left: auto; display: flex; gap: 1rem; flex-wrap: wrap; }
-  .led {
-    display: inline-block;
-    width: 8px; height: 8px;
-    border-radius: 50%;
-    background: var(--green);
-    box-shadow: 0 0 8px var(--green);
-    margin-right: 0.35rem;
-    vertical-align: baseline;
-    animation: pulse 2.4s ease-in-out infinite;
-  }
-  @keyframes pulse { 50% { opacity: 0.45; } }
-
-  /* ===== hero ===== */
-  .hero {
-    display: grid;
-    grid-template-columns: 1fr auto;
-    gap: 2rem;
-    align-items: center;
-    padding: 3.5rem 0 2.5rem;
-  }
+  @keyframes breathe { 50% { opacity: 0.45; } }
   .hero h1 {
-    font-size: clamp(1.9rem, 6vw, 3.2rem);
-    color: var(--green);
-    text-shadow: var(--glow);
-    letter-spacing: 0.12em;
+    font-size: clamp(2.3rem, 6.2vw, 4rem);
+    font-weight: 780; letter-spacing: -0.032em; line-height: 1.05; max-width: 19ch;
   }
-  .hero .role {
-    color: var(--amber);
-    margin: 0.4rem 0 1.2rem;
-    letter-spacing: 0.06em;
+  .hero h1 em {
+    font-style: normal;
+    background: linear-gradient(100deg, var(--accent), var(--accent-2));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
   }
-  .hero p { max-width: 56ch; color: var(--text); }
-  .hero .ids { margin-top: 1.2rem; color: var(--muted); font-size: 12px; }
-  .hero .ids a { color: var(--cyan); text-decoration: none; }
-  .hero .ids a:hover { text-decoration: underline; }
-  .botart {
-    color: var(--green-dim);
-    font-size: clamp(7px, 1.3vw, 11px);
-    line-height: 1.18;
-    white-space: pre;
-    user-select: none;
-    text-shadow: 0 0 4px rgba(74, 246, 38, 0.3);
+  .hero .lede { margin-top: 1.35rem; max-width: 60ch; color: var(--text-2); font-size: 1.09rem; }
+  .hero-actions { display: flex; gap: 0.7rem; flex-wrap: wrap; margin-top: 2rem; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 0.45rem;
+    padding: 0.7rem 1.25rem; border-radius: 10px;
+    font-size: 0.92rem; font-weight: 600; text-decoration: none;
+    border: 1px solid transparent; cursor: pointer;
+    font-family: inherit;
+    transition: transform 0.14s, background 0.16s, border-color 0.16s, box-shadow 0.16s;
   }
-  @media (max-width: 720px) { .hero { grid-template-columns: 1fr; } .botart { display: none; } }
+  .btn:hover { transform: translateY(-2px); }
+  .btn.primary { background: var(--accent); color: #fff; box-shadow: 0 6px 18px var(--ring); }
+  .btn.ghost { border-color: var(--border); background: var(--surface); color: var(--text); }
+  .btn.ghost:hover { border-color: var(--accent); color: var(--accent); }
 
-  /* ===== telemetry ticker ===== */
-  .telemetry {
-    border: 1px solid var(--line);
-    background: var(--panel);
-    display: flex;
-    flex-wrap: wrap;
-    margin-bottom: 2.5rem;
+  /* ============ METRICS ============ */
+  .metrics {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    border: 1px solid var(--border); border-radius: 14px;
+    background: var(--surface); overflow: hidden; margin-top: 3rem;
   }
-  .telemetry .cell {
-    flex: 1 1 140px;
-    padding: 0.7rem 1rem;
-    border-right: 1px solid var(--line);
-    min-width: 130px;
+  .metric { padding: 1.15rem 1.25rem; border-right: 1px solid var(--border); }
+  .metric:last-child { border-right: none; }
+  .metric .v { font-size: 1.5rem; font-weight: 720; letter-spacing: -0.02em; }
+  .metric .v span { font-size: 0.85rem; color: var(--text-2); font-weight: 500; }
+  .metric .k {
+    font-size: 0.74rem; color: var(--text-2); margin-top: 0.15rem;
+    letter-spacing: 0.04em; text-transform: uppercase;
   }
-  .telemetry .cell:last-child { border-right: none; }
-  .telemetry .k { color: var(--muted); font-size: 10px; letter-spacing: 0.12em; }
-  .telemetry .v { color: var(--green); font-size: 1.15rem; text-shadow: var(--glow); }
-  .telemetry .u { color: var(--muted); font-size: 0.75rem; }
+  @media (max-width: 700px) {
+    .metric { border-right: none; border-bottom: 1px solid var(--border); }
+    .metric:last-child { border-bottom: none; }
+  }
 
-  /* ===== sections ===== */
-  h2.sec {
-    color: var(--amber);
-    font-size: 0.95rem;
-    letter-spacing: 0.18em;
-    margin: 2.5rem 0 1rem;
+  /* ============ SECTIONS ============ */
+  section { padding: 4.5rem 0; }
+  .sec-head { margin-bottom: 2rem; max-width: 62ch; }
+  .sec-head .tag {
+    font-size: 0.75rem; font-weight: 700; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--accent);
   }
-  h2.sec::before { content: "── "; color: var(--line); }
-  h2.sec::after { content: " ──────────────────────────"; color: var(--line); }
+  .sec-head h2 {
+    font-size: clamp(1.6rem, 3.4vw, 2.1rem); font-weight: 740;
+    letter-spacing: -0.022em; margin-top: 0.45rem;
+  }
+  .sec-head p { color: var(--text-2); margin-top: 0.6rem; }
+  .rule { height: 1px; background: var(--border); }
 
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
-    gap: 1rem;
+  /* ============ UNLOCK BAR ============ */
+  .unlock {
+    display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;
+    border: 1px solid var(--border); border-radius: 12px;
+    background: var(--surface-2); padding: 0.9rem 1.1rem; margin-bottom: 1.9rem;
   }
-  .card {
-    border: 1px solid var(--line);
-    background: var(--panel);
-    padding: 1rem;
-    position: relative;
-    transition: border-color 0.15s, transform 0.15s, box-shadow 0.15s;
-    display: block;
-    color: inherit;
-    text-decoration: none;
+  .unlock .ico { color: var(--accent); font-size: 1.05rem; }
+  .unlock .msg { font-size: 0.89rem; color: var(--text-2); flex: 1; min-width: 210px; }
+  .unlock input {
+    font: inherit; font-size: 0.9rem;
+    padding: 0.5rem 0.8rem; border-radius: 9px;
+    border: 1px solid var(--border); background: var(--surface); color: var(--text);
+    width: 165px; outline: none;
   }
-  a.card:hover {
-    border-color: var(--green);
-    transform: translateY(-2px);
-    box-shadow: 0 0 18px rgba(74, 246, 38, 0.12);
-  }
-  .card .sub { color: var(--muted); font-size: 10px; letter-spacing: 0.14em; }
-  .card h3 { color: var(--green); font-size: 1rem; margin: 0.25rem 0 0.5rem; text-shadow: var(--glow); }
-  .card p { color: var(--text); font-size: 12.5px; }
-  .card .tags { margin-top: 0.7rem; display: flex; gap: 0.4rem; flex-wrap: wrap; }
-  .card .tag {
-    border: 1px solid var(--line);
-    color: var(--muted);
-    font-size: 10px;
-    padding: 0.1rem 0.4rem;
-  }
-  .card .status {
-    position: absolute; top: 0.9rem; right: 0.9rem;
-    font-size: 10px; color: var(--green);
-  }
-  .card.classified { border-style: dashed; }
-  .card.classified h3 { color: var(--red); text-shadow: 0 0 6px rgba(255, 79, 79, 0.4); }
-  .card.classified .status { color: var(--red); }
-  .card.classified .status .led { background: var(--red); box-shadow: 0 0 8px var(--red); }
+  .unlock input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--ring); }
+  .unlock .btn { padding: 0.52rem 1.05rem; }
+  .unlock.ok { border-color: rgba(34,197,94,0.45); background: rgba(34,197,94,0.07); }
+  .unlock.bad input { border-color: #ef4444; }
+  .unlock .err { color: #ef4444; font-size: 0.85rem; width: 100%; }
 
-  /* ===== pipeline ===== */
-  .pipeline {
-    border: 1px solid var(--line);
-    background: var(--panel);
-    padding: 1.2rem 1rem;
-    overflow-x: auto;
+  /* ============ VIDEO SHOWCASE ============ */
+  .reel { display: grid; gap: 1.75rem; }
+  .reel-row {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;
+    border: 1px solid var(--border); border-radius: 16px;
+    background: var(--surface); padding: 1rem; box-shadow: var(--shadow-sm);
   }
-  .pipeline pre {
-    color: var(--text);
-    font-size: clamp(9px, 1.6vw, 12.5px);
-    line-height: 1.5;
+  .reel-row.single { grid-template-columns: 1fr; }
+  .reel-head {
+    grid-column: 1 / -1; padding: 0.25rem 0.35rem 0.6rem;
   }
-  .pipeline .hot { color: var(--green); text-shadow: var(--glow); }
-  .pipeline .num { color: var(--amber); }
+  .reel-head h3 { font-size: 1.05rem; font-weight: 700; letter-spacing: -0.012em; }
+  .reel-head p { color: var(--text-2); font-size: 0.87rem; max-width: 62ch; margin-top: 0.2rem; }
 
-  /* ===== feed ===== */
-  .feed {
-    border: 1px solid var(--line);
-    background: var(--panel);
-    height: 200px;
-    overflow: hidden;
-    padding: 0.6rem 1rem;
-    font-size: 11.5px;
-    position: relative;
+  .clip { position: relative; border-radius: 11px; overflow: hidden; background: #05060a; }
+  .clip video { width: 100%; aspect-ratio: 16/9; object-fit: cover; }
+  .clip .label {
+    position: absolute; top: 0.6rem; left: 0.6rem; z-index: 3;
+    background: rgba(5,6,10,0.72); backdrop-filter: blur(6px);
+    color: #f2f3f7; border: 1px solid rgba(255,255,255,0.14);
+    font-size: 0.68rem; font-weight: 700; letter-spacing: 0.1em;
+    text-transform: uppercase; padding: 0.22rem 0.55rem; border-radius: 6px;
   }
-  .feed::after {
-    content: "";
-    position: absolute; inset: 0;
-    background: linear-gradient(to bottom, var(--panel) 0%, transparent 25%);
+  .clip .label.real { border-color: rgba(34,197,94,0.5); color: #86efac; }
+  .clip .label.sim { border-color: rgba(139,140,247,0.5); color: #c7c7ff; }
+
+  /* locked state */
+  .clip.locked .preview {
+    position: absolute; inset: 0; width: 100%; height: 100%;
+    object-fit: cover; transform: scale(1.15);
+    filter: blur(14px) saturate(1.1) brightness(0.72);
+  }
+  .clip.locked video { visibility: hidden; }
+  .clip .veil {
+    position: absolute; inset: 0; z-index: 2;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 0.35rem; text-align: center; padding: 1rem;
+    background: rgba(5,6,10,0.32);
+    transition: opacity 0.35s;
+  }
+  .clip .veil .lockico { font-size: 1.5rem; }
+  .clip .veil .t {
+    color: #f2f3f7; font-size: 0.86rem; font-weight: 650;
+    text-shadow: 0 1px 6px rgba(0,0,0,0.6);
+  }
+  .clip .veil .s {
+    color: rgba(242,243,247,0.72); font-size: 0.76rem;
+    text-shadow: 0 1px 6px rgba(0,0,0,0.6);
+  }
+  .clip.unlocked .veil, .clip.unlocked .preview { opacity: 0; pointer-events: none; }
+  .clip.unlocked video { visibility: visible; }
+  .clip.working .veil .s::after {
+    content: ""; animation: dots 1.2s steps(4, end) infinite;
+  }
+  @keyframes dots { 0% { content: ""; } 25% { content: "."; } 50% { content: ".."; } 75% { content: "..."; } }
+  @media (max-width: 720px) { .reel-row { grid-template-columns: 1fr; } }
+
+  /* ============ EXPERIENCE ============ */
+  .xp {
+    border: 1px solid var(--border); border-radius: 16px;
+    background: var(--surface); padding: 1.9rem; box-shadow: var(--shadow-sm);
+  }
+  .xp-top {
+    display: flex; align-items: flex-start; justify-content: space-between;
+    gap: 1rem; flex-wrap: wrap; padding-bottom: 1.2rem;
+    border-bottom: 1px solid var(--border); margin-bottom: 1.4rem;
+  }
+  .xp-top h3 { font-size: 1.25rem; font-weight: 720; letter-spacing: -0.015em; }
+  .xp-top .co { color: var(--accent); font-weight: 620; }
+  .xp-top .meta { color: var(--text-2); font-size: 0.85rem; }
+  .xp ul { list-style: none; display: grid; gap: 1.1rem; }
+  .xp li { display: grid; grid-template-columns: auto 1fr; gap: 0.85rem; align-items: start; }
+  .xp li::before {
+    content: ""; width: 7px; height: 7px; border-radius: 2px;
+    background: var(--accent); margin-top: 0.65rem;
+  }
+  .xp li p { color: var(--text-2); font-size: 0.95rem; }
+  .xp li b { color: var(--text); font-weight: 640; }
+  .xp .stack {
+    display: flex; flex-wrap: wrap; gap: 0.4rem;
+    margin-top: 1.5rem; padding-top: 1.4rem; border-top: 1px solid var(--border);
+  }
+
+  .pill {
+    font-size: 0.77rem; color: var(--text-2);
+    background: var(--surface-2); border: 1px solid var(--border);
+    border-radius: 7px; padding: 0.26rem 0.6rem; white-space: nowrap;
+  }
+
+  /* ============ SKILLS ============ */
+  .skills { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 1.1rem; }
+  .skill {
+    border: 1px solid var(--border); border-radius: 14px;
+    background: var(--surface); padding: 1.35rem;
+  }
+  .skill h3 {
+    font-size: 0.83rem; font-weight: 700; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--text-2); margin-bottom: 0.85rem;
+  }
+  .skill .pills { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+
+  /* ============ CONTACT ============ */
+  .contact {
+    border: 1px solid var(--border); border-radius: 18px;
+    background: var(--surface); padding: 3rem 2rem; text-align: center;
+    position: relative; overflow: hidden;
+  }
+  .contact::before {
+    content: ""; position: absolute; inset: -60% 20% auto 20%; height: 300px;
+    background: radial-gradient(ellipse at center, var(--ring), transparent 70%);
     pointer-events: none;
   }
-  .feed .line { color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .feed .line .t { color: var(--green-dim); }
-  .feed .line .topic { color: var(--cyan); }
-  .feed .line .impl { color: var(--green); }
-  .feed .line .plan { color: var(--amber); }
+  .contact h2 { font-size: clamp(1.5rem,3.4vw,2rem); font-weight: 740; letter-spacing: -0.022em; position: relative; }
+  .contact p { color: var(--text-2); margin: 0.6rem auto 1.7rem; max-width: 48ch; position: relative; }
+  .contact .btns { display: flex; justify-content: center; gap: 0.7rem; flex-wrap: wrap; position: relative; }
 
   footer {
-    margin-top: 3rem;
-    border-top: 1px solid var(--line);
-    padding-top: 1.2rem;
-    color: var(--muted);
-    font-size: 11.5px;
-    display: flex;
-    justify-content: space-between;
-    gap: 1rem;
-    flex-wrap: wrap;
+    border-top: 1px solid var(--border); margin-top: 4rem;
+    padding: 1.8rem 0 2.5rem;
+    display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap;
+    color: var(--text-2); font-size: 0.84rem;
   }
-  footer a { color: var(--cyan); text-decoration: none; }
-  footer a:hover { text-decoration: underline; }
+  footer a { text-decoration: none; }
+  footer a:hover { color: var(--accent); }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; }
+    html { scroll-behavior: auto; }
+  }
 </style>
 </head>
-<body class="crt">
+<body>
 
-<div id="boot"><span id="bootText" class="cursor"></span><span class="skip">[ PRESS ANY KEY / TAP TO SKIP BOOT ]</span></div>
-
-<canvas id="lidar" aria-hidden="true"></canvas>
-<div class="crt-tint" aria-hidden="true"></div>
-
-<div id="console" role="dialog" aria-label="operator console">
-  <div class="cbody" id="cbody"></div>
-  <div class="cline"><span class="prompt">visitor@g1:~$</span><input id="cinput" type="text" autocomplete="off" spellcheck="false" aria-label="console input"></div>
-</div>
-<div class="conhint" id="conhint">[ ` ] operator console &nbsp;·&nbsp; ↑↑↓↓←→←→BA manual override</div>
-
-<header class="bar">
-  <span class="logo">ROBOMANTRI · G1 CONTROL HUB</span>
-  <span class="stat"><span class="led"></span><b id="sysstat">ONLINE</b></span>
-  <span class="stat">DOF <b>29/29</b></span>
-  <div class="right">
-    <span class="stat">BAT <b id="bat">87%</b></span>
-    <span class="stat">UPTIME <b id="uptime">00:00:00</b></span>
+<header class="nav">
+  <div class="nav-inner">
+    <a class="brand" href="#top"><span class="dot"></span>Krishna Gupta</a>
+    <nav class="nav-links">
+      <a href="#work">Work</a>
+      <a href="#experience">Experience</a>
+      <a href="#skills">Skills</a>
+      <a href="resume.pdf" target="_blank" rel="noopener">Resume</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle color theme" title="Toggle theme">◐</button>
   </div>
 </header>
 
-<div class="wrap">
+<main class="wrap" id="top">
 
+  <!-- ===== HERO ===== -->
   <section class="hero">
-    <div>
-      <h1 id="name">KRISHNA</h1>
-      <div class="role">// robotics engineer · humanoid autonomy</div>
-      <p>
-        I build the full stack between photons and motor torques on the
-        Unitree G1 humanoid — LiDAR SLAM and A* navigation, monocular
-        webcam teleop (SMPL pose → 29-DOF retargeting → whole-body control),
-        and VLA policy deployment from ONNX to TensorRT on Jetson-class
-        edge compute.
-      </p>
-      <div class="ids">
-        OPERATOR ID: <a href="https://github.com/robomantri">github.com/robomantri</a>
-        &nbsp;·&nbsp; UPLINK: <a href="mailto:krishnaguptarobotics@gmail.com">krishnaguptarobotics@gmail.com</a>
+    <div class="status"><span class="live"></span>Robotics Engineer · Humanoid autonomy</div>
+    <h1>Turning human intent into <em>humanoid motion</em>.</h1>
+    <p class="lede">
+      I build the full stack between perception and torque on 29-DoF humanoids —
+      VR and webcam teleoperation, whole-body control, and vision-language-action
+      policies deployed to real hardware.
+    </p>
+    <div class="hero-actions">
+      <a class="btn primary" href="#work">Watch the demos</a>
+      <a class="btn ghost" href="resume.pdf" target="_blank" rel="noopener">Resume ↗</a>
+      <a class="btn ghost" href="https://github.com/robomantri" target="_blank" rel="noopener">GitHub ↗</a>
+      <a class="btn ghost" href="mailto:krishnaguptarobotics@gmail.com">Email</a>
+    </div>
+
+    <div class="metrics">
+      <div class="metric"><div class="v">0.7 <span>cm</span></div><div class="k">Wrist accuracy</div></div>
+      <div class="metric"><div class="v">29 <span>DoF</span></div><div class="k">Whole-body control</div></div>
+      <div class="metric"><div class="v">1 <span>kHz</span></div><div class="k">Motor command rate</div></div>
+      <div class="metric"><div class="v">~130 <span>ms</span></div><div class="k">Photon → motion</div></div>
+    </div>
+  </section>
+
+  <!-- ===== VIDEO SHOWCASE ===== -->
+  <section id="work">
+    <div class="sec-head">
+      <div class="tag">Selected work</div>
+      <h2>Simulation, then hardware</h2>
+      <p>Every pipeline below is validated twice — first in simulation, then live on the physical G1. Hardware footage is password-protected.</p>
+    </div>
+
+    <form class="unlock" id="unlockBar" autocomplete="off">
+      <span class="ico">🔒</span>
+      <span class="msg" id="unlockMsg">Hardware footage is protected. Enter the password to view it.</span>
+      <input type="password" id="pw" placeholder="Password" aria-label="Password for hardware footage">
+      <button class="btn primary" type="submit" id="unlockBtn">Unlock</button>
+    </form>
+
+    <div class="reel">
+
+      <div class="reel-row">
+        <div class="reel-head">
+          <h3>Teleoperated imitation from a single webcam</h3>
+          <p>Monocular human pose estimation retargeted to the 29-DoF humanoid and executed through whole-body control — no motion capture suit, no markers.</p>
+        </div>
+        <div class="clip">
+          <video src="videos/teleop-webcam-sim.mp4" autoplay muted loop playsinline preload="metadata"
+                 controlslist="nodownload" disablepictureinpicture></video>
+          <span class="label sim">Simulation</span>
+        </div>
+        <div class="clip locked" data-enc="videos/teleop-webcam-real.mp4.enc">
+          <img class="preview" alt="" aria-hidden="true"
+               src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAwICQsJCAwLCgsODQwOEh4UEhEREiUbHBYeLCcuLisnKyoxN0Y7MTRCNCorPVM+QkhKTk9OLztWXFVMW0ZNTkv/2wBDAQ0ODhIQEiQUFCRLMisyS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0v/wAARCAAwADADASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwBPJYcjkU2JJZpsKOK0LdkZSCKpW19Ha3zL1BNClYTjc0DpfmRZb7wrPj3Jc+VJwBWyNUQjhTWFqM+6+BAxmlK7BWRuSaaskAIYVBFpQB4NZ0d3ch9qkkVciu7pP4DWcFNL3mN2IBdQpE2zrisS1lJ1Is67lzVpeBioJmEfKdasZ0Iu4gOIxWPeXQe+UhRio0kldQc1TklK3il+lAjajuTG24KKf/aUgPQVVDqQMUjYIoAqyMUqi0xEnz9KuX2Y5MVQdd7UwLYvFRQFGapXUrysCFxU6RU/ygOtAD7OVjGA3WrHmEVDHgDihnoA/9k=">
+          <video muted loop playsinline preload="none"
+                 controlslist="nodownload" disablepictureinpicture></video>
+          <span class="label real">Real robot</span>
+          <div class="veil">
+            <div class="lockico">🔒</div>
+            <div class="t">Hardware footage</div>
+            <div class="s">Password required</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="reel-row">
+        <div class="reel-head">
+          <h3>Vision-language-action policy deployment</h3>
+          <p>GR00T N1.7 VLA fine-tuned on a new embodiment through an imitation-learning data pipeline, then exported and run on edge compute — sim-trained, hardware-proven.</p>
+        </div>
+        <div class="clip">
+          <video src="videos/vla-sim.mp4" autoplay muted loop playsinline preload="metadata"
+                 controlslist="nodownload" disablepictureinpicture></video>
+          <span class="label sim">Simulation</span>
+        </div>
+        <div class="clip locked" data-enc="videos/vla-real.mp4.enc">
+          <img class="preview" alt="" aria-hidden="true"
+               src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAwICQsJCAwLCgsODQwOEh4UEhEREiUbHBYeLCcuLisnKyoxN0Y7MTRCNCorPVM+QkhKTk9OLztWXFVMW0ZNTkv/2wBDAQ0ODhIQEiQUFCRLMisyS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0v/wAARCAAbADADASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDh7IKZwW6CuutkS7jQY+UVx9ouJl3dM16BYxxS2aCHg4613z3EXLbT4VQEVS8R6eHs96DpVsB4LZhuJaqIvp5Ymt3TOe9RYlnDyAqxBqN3wK1dQ06ZJGOw4+lZFzGyDBBFEV7xKL4spfMHy13GhwLHaLnrWMQM9K19OJ2DmsXV1PUqYNRV7mn5YPaqssKo+QtaUYG0UjKCegrdHC4FKNI5hh0B/CsPxJpEPk74kwfaupVQD0FR3SKycgGrTsLlP//Z">
+          <video muted loop playsinline preload="none"
+                 controlslist="nodownload" disablepictureinpicture></video>
+          <span class="label real">Real robot</span>
+          <div class="veil">
+            <div class="lockico">🔒</div>
+            <div class="t">Hardware footage</div>
+            <div class="s">Password required</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="reel-row single">
+        <div class="reel-head">
+          <h3>Custom imitation-learning choreography</h3>
+          <p>A full-length dance sequence learned from human demonstration and replayed on hardware — a stress test for long-horizon whole-body tracking and balance.</p>
+        </div>
+        <div class="clip locked" data-enc="videos/imitation-dance.mp4.enc">
+          <img class="preview" alt="" aria-hidden="true"
+               src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAwICQsJCAwLCgsODQwOEh4UEhEREiUbHBYeLCcuLisnKyoxN0Y7MTRCNCorPVM+QkhKTk9OLztWXFVMW0ZNTkv/2wBDAQ0ODhIQEiQUFCRLMisyS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0v/wAARCABVADADASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDiEhJ6VYFo5GcGrkUKhu1XeVTGBUgY32cilEZQ5rWjtWmbjvTL2xa3Xc1K4LUz/tLkbRUDxu5yRVuwiEsxyOM1sGxTHApg9CnY2Dbt7vwKvXNuGj+9gCqcjyJBlTUkLNMgVm5NOwPUY8jWygwksaLq6kuIf3o7VO9sYYWZsVVhAnBLuMUtWCVipp84SUqRjJroIixizVSPTLYp5qvkilS/CDYF4FOwnqYqasoARjkU6TVY0IKnBFZMdmJMfNV9NPtxGNzZar0sMbdazJOmwMcGks0mEZbnBrXh0OGSNXiIPrWtDobBFBZdvpUtpAYFnqAhiZZDTJLrIJGMVo6toaPIqQsAc81W1XRxBbxqjc45pMasR2+iTc5OKeujrG2ZZ+PrUJvriTq5FKpZ/vMTQm0Dd9WacF3b2MZWMljVJ9Xumn3BiE9Kj2A9qPKHegRHLeTST7wx607UbqWdE2scgVE0iB9tMMgJxQAIKsR4FU1kqQPQBdBpGbiq4l4pDLQArQqW3d6rGPa5OalaWoHl5oAYpp4Y0UUAOyaCaKKAI3Y1AxNFFAH/2Q==">
+          <video muted loop playsinline preload="none"
+                 controlslist="nodownload" disablepictureinpicture></video>
+          <span class="label real">Real robot</span>
+          <div class="veil">
+            <div class="lockico">🔒</div>
+            <div class="t">Hardware footage</div>
+            <div class="s">Password required</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <div class="rule"></div>
+
+  <!-- ===== EXPERIENCE ===== -->
+  <section id="experience">
+    <div class="sec-head">
+      <div class="tag">Experience</div>
+      <h2>What I've built</h2>
+    </div>
+
+    <div class="xp">
+      <div class="xp-top">
+        <div>
+          <h3>Robotics Engineer</h3>
+          <div class="co">Kayaa</div>
+        </div>
+        <div class="meta">Humanoid teleoperation &amp; robot learning</div>
+      </div>
+
+      <ul>
+        <li>
+          <p>
+            Architected the <b>VR teleoperation stack</b> on the 29-DoF Unitree G1: Quest 3 controller
+            and hand poses fused with ZED BODY_38 skeletons, GMR retargeting into
+            <b>NVIDIA SONIC whole-body control</b> — achieving <b>0.7 cm wrist accuracy</b>,
+            live-validated on hardware.
+          </p>
+        </li>
+        <li>
+          <p>
+            Deployed the stack on <b>Jetson AGX Orin</b> via custom SONIC/TensorRT builds, and developed a
+            <b>stereo vision return path</b> (ZED → WebRTC) streaming back to the Meta Quest headset.
+          </p>
+        </li>
+        <li>
+          <p>
+            Own the <b>robot-learning stack</b>: an imitation-learning data pipeline for
+            <b>GR00T N1.7 VLA</b> action-space fine-tuning on a new embodiment, plus baseline
+            locomotion policies trained across <b>Isaac Sim / Isaac Gym</b> and <b>MuJoCo</b>.
+          </p>
+        </li>
+      </ul>
+
+      <div class="stack">
+        <span class="pill">Unitree G1</span>
+        <span class="pill">Meta Quest 3</span>
+        <span class="pill">ZED BODY_38</span>
+        <span class="pill">GMR retargeting</span>
+        <span class="pill">NVIDIA SONIC</span>
+        <span class="pill">Jetson AGX Orin</span>
+        <span class="pill">TensorRT</span>
+        <span class="pill">WebRTC</span>
+        <span class="pill">GR00T N1.7</span>
+        <span class="pill">Isaac Sim</span>
+        <span class="pill">Isaac Gym</span>
+        <span class="pill">MuJoCo</span>
       </div>
     </div>
-    <div class="botart" aria-hidden="true">        ┌─◉─┐
-        │MID│  ◄ LiDAR (MID-360)
-        └─┬─┘
-      ┌──┴──┐
-      │ ◉ ◉ │  ◄ stereo head
-      └──┬──┘
-   ◉──┬──┴──┬──◉
-   │  │ G1  │  │
-   ◉  │ EDU │  ◉
-   │  └──┬──┘  │
-  ╔╧╗    │    ╔╧╗
-  ╚═╝ ┌──┴──┐ ╚═╝
-      │     │
-      ◉     ◉
-      │     │
-      ◉     ◉
-      │     │
-     ─┴─   ─┴─
-   29 DOF · 1 kHz</div>
   </section>
 
-  <section class="telemetry" aria-label="live telemetry">
-    <div class="cell"><div class="k">POLICY DECODE</div><div class="v" id="t-dec">0.39</div><div class="u">ms / step (ORT)</div></div>
-    <div class="cell"><div class="k">ZMQ PIPE</div><div class="v" id="t-zmq">21</div><div class="u">µs unpack→pack</div></div>
-    <div class="cell"><div class="k">CHUNK HANDOVER</div><div class="v" id="t-chk">2.25</div><div class="u">ms p50</div></div>
-    <div class="cell"><div class="k">WBC LOOP</div><div class="v">30<span style="font-size:0.7em"> Hz</span></div><div class="u">motor cmd 1 kHz</div></div>
-    <div class="cell"><div class="k">POSE STREAM</div><div class="v" id="t-fps">30</div><div class="u">fps SMPL webcam</div></div>
-    <div class="cell"><div class="k">PHOTON→MOTION</div><div class="v" id="t-e2e">~130</div><div class="u">ms end-to-end</div></div>
-  </section>
+  <div class="rule"></div>
 
-  <h2 class="sec">SUBSYSTEMS</h2>
-  <section class="grid">
-    <a class="card" href="https://github.com/robomantri/slam-web-v2">
-      <span class="status"><span class="led"></span>ACTIVE</span>
-      <div class="sub">SUBSYS-01 · NAVIGATION</div>
-      <h3>slam-web-v2</h3>
-      <p>G1 Control Hub — LiDAR SLAM, teleop and an A* global path planner for the Unitree G1, in one web console.</p>
-      <div class="tags"><span class="tag">SLAM</span><span class="tag">A*</span><span class="tag">FAST-LIO</span><span class="tag">WebUI</span></div>
-    </a>
-    <a class="card" href="https://github.com/robomantri/CudaRobotics">
-      <span class="status"><span class="led"></span>ACTIVE</span>
-      <div class="sub">SUBSYS-02 · COMPUTE</div>
-      <h3>CudaRobotics</h3>
-      <p>20+ CUDA-accelerated robotics algorithms in C++ — SLAM, path planning and localization on the GPU.</p>
-      <div class="tags"><span class="tag">CUDA</span><span class="tag">C++</span><span class="tag">GPU</span></div>
-    </a>
-    <a class="card" href="https://github.com/robomantri/sage">
-      <span class="status"><span class="led"></span>ACTIVE</span>
-      <div class="sub">SUBSYS-03 · SIM2REAL</div>
-      <h3>sage</h3>
-      <p>Framework for measuring sim-to-real gaps in robot joint motion — physics sim, real hardware capture, statistical analysis.</p>
-      <div class="tags"><span class="tag">MuJoCo</span><span class="tag">sim2real</span><span class="tag">analysis</span></div>
-    </a>
-    <a class="card" href="https://github.com/robomantri/livox_ros_driver2_g1">
-      <span class="status"><span class="led"></span>ACTIVE</span>
-      <div class="sub">SUBSYS-04 · PERCEPTION</div>
-      <h3>livox_ros_driver2_g1</h3>
-      <p>Livox MID-360 driver fork that rotates IMU extrinsics along with the point cloud — for upside-down LiDAR mounts on the G1.</p>
-      <div class="tags"><span class="tag">LiDAR</span><span class="tag">ROS2</span><span class="tag">IMU</span></div>
-    </a>
-    <a class="card" href="https://github.com/robomantri/nav-autonomy-deploy">
-      <span class="status"><span class="led"></span>ACTIVE</span>
-      <div class="sub">SUBSYS-05 · DEPLOY</div>
-      <h3>nav-autonomy-deploy</h3>
-      <p>Deployment configuration for a ROS 2 navigation autonomy stack on embedded robot compute.</p>
-      <div class="tags"><span class="tag">ROS2</span><span class="tag">Jetson</span><span class="tag">ops</span></div>
-    </a>
-    <div class="card classified">
-      <span class="status"><span class="led"></span>INTERNAL</span>
-      <div class="sub">SUBSYS-0X · ████████</div>
-      <h3>[ REDACTED ]</h3>
-      <p>Real-time whole-body teleoperation and VLA policy work. Telemetry says it exists. The repo disagrees — for now.</p>
-      <div class="tags"><span class="tag">VLA</span><span class="tag">teleop</span><span class="tag">WBC</span><span class="tag">█████</span></div>
+  <!-- ===== SKILLS ===== -->
+  <section id="skills">
+    <div class="sec-head">
+      <div class="tag">Capabilities</div>
+      <h2>Tools &amp; domains</h2>
+    </div>
+    <div class="skills">
+      <div class="skill">
+        <h3>Teleoperation &amp; Control</h3>
+        <div class="pills">
+          <span class="pill">Whole-body control</span><span class="pill">NVIDIA SONIC</span>
+          <span class="pill">Motion retargeting</span><span class="pill">VR teleop</span>
+          <span class="pill">Quest 3</span>
+        </div>
+      </div>
+      <div class="skill">
+        <h3>Robot Learning</h3>
+        <div class="pills">
+          <span class="pill">GR00T N1.7 VLA</span><span class="pill">Imitation learning</span>
+          <span class="pill">Isaac Sim / Gym</span><span class="pill">MuJoCo</span>
+          <span class="pill">Sim2real</span>
+        </div>
+      </div>
+      <div class="skill">
+        <h3>Perception &amp; Navigation</h3>
+        <div class="pills">
+          <span class="pill">LiDAR SLAM</span><span class="pill">FAST-LIO</span>
+          <span class="pill">ZED stereo</span><span class="pill">Pose estimation</span>
+          <span class="pill">A* planning</span><span class="pill">ROS 2</span>
+        </div>
+      </div>
+      <div class="skill">
+        <h3>Systems &amp; Deployment</h3>
+        <div class="pills">
+          <span class="pill">C++</span><span class="pill">Python</span>
+          <span class="pill">CUDA</span><span class="pill">TensorRT</span>
+          <span class="pill">ONNX</span><span class="pill">Jetson</span>
+          <span class="pill">WebRTC</span>
+        </div>
+      </div>
     </div>
   </section>
 
-  <h2 class="sec">PIPELINE</h2>
-  <section class="pipeline">
-<pre>
- photon                                                            torque
-   │                                                                  ▲
-   ▼                                                                  │
- [webcam 30fps] ─► [SMPL pose est.] ─► [retarget → 29-DOF] ─► [WBC <span class="num">30Hz</span>] ─► [motor cmd <span class="num">1kHz</span>]
-                        <span class="hot">GPU</span>                 <span class="hot">geometry</span>           <span class="hot">MuJoCo / real</span>
-                                                                      │
- [LiDAR MID-360] ─► [FAST-LIO SLAM] ─► [A* global plan] ──────────────┘
-                                                          end-to-end <span class="num">~130 ms</span>
-</pre>
+  <!-- ===== CONTACT ===== -->
+  <section id="contact">
+    <div class="contact">
+      <h2>Let's build something that moves.</h2>
+      <p>Open to robotics engineering roles and collaborations in humanoid autonomy, teleoperation and robot learning.</p>
+      <div class="btns">
+        <a class="btn primary" href="mailto:krishnaguptarobotics@gmail.com">krishnaguptarobotics@gmail.com</a>
+        <a class="btn ghost" href="resume.pdf" target="_blank" rel="noopener">Resume ↗</a>
+        <a class="btn ghost" href="https://github.com/robomantri" target="_blank" rel="noopener">GitHub ↗</a>
+      </div>
+    </div>
   </section>
 
-  <h2 class="sec">DDS FEED</h2>
-  <section class="feed" id="feed" aria-hidden="true"></section>
-
   <footer>
-    <span>© 2026 KRISHNA · transmission ends. no humanoids were harmed.</span>
-    <span>
-      <a href="https://github.com/robomantri">github</a> ·
-      <a href="mailto:krishnaguptarobotics@gmail.com">email</a> ·
-      <a href="#" id="reboot">reboot</a>
-    </span>
+    <span>© 2026 Krishna Gupta</span>
+    <span><a href="https://github.com/robomantri" target="_blank" rel="noopener">github.com/robomantri</a></span>
   </footer>
 
-</div>
+</main>
 
 <script>
 (function () {
-  /* ===== boot sequence ===== */
-  var bootLines = [
-    "UNITREE G1 EDU · ROBOMANTRI CONTROL HUB v2.9",
-    "POST  joints ............ 29/29 responding         [OK]",
-    "mount /dev/mid360 ....... LiDAR (inverted mount)   [OK]",
-    "dds   cyclonedds ........ domain 0, rt/lowstate    [OK]",
-    "slam  fast-lio .......... localization lock        [OK]",
-    "nav   a-star ............ global planner armed     [OK]",
-    "pose  smpl-webcam ....... 30 fps stream            [OK]",
-    "vla   policy ............ ONNX → TensorRT          [OK]",
-    "auth  operator .......... krishna                  [GRANTED]",
-    "",
-    "ALL SYSTEMS NOMINAL — ENTERING CONTROL HUB"
-  ];
-  var boot = document.getElementById("boot");
-  var bootText = document.getElementById("bootText");
-  var li = 0, ci = 0, killed = false;
-
-  function typeBoot() {
-    if (killed) return;
-    if (li >= bootLines.length) { setTimeout(endBoot, 450); return; }
-    var line = bootLines[li];
-    if (ci <= line.length) {
-      bootText.textContent += line.charAt(ci);
-      ci++;
-      setTimeout(typeBoot, li === 0 ? 18 : 6);
-    } else {
-      bootText.textContent += "\n";
-      li++; ci = 0;
-      setTimeout(typeBoot, li === bootLines.length - 1 ? 350 : 90);
-    }
+  /* ---------- theme ---------- */
+  var root = document.documentElement;
+  var toggle = document.getElementById("themeToggle");
+  var stored = localStorage.getItem("theme");
+  if (stored) root.setAttribute("data-theme", stored);
+  function currentTheme() {
+    var a = root.getAttribute("data-theme");
+    if (a) return a;
+    return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
   }
-  function endBoot() {
-    killed = true;
-    boot.classList.add("done");
-    startClock();
-  }
-  boot.addEventListener("click", endBoot);
-  window.addEventListener("keydown", function (e) {
-    if (!killed) { e.preventDefault(); endBoot(); window.scrollTo(0, 0); }
+  toggle.addEventListener("click", function () {
+    var next = currentTheme() === "dark" ? "light" : "dark";
+    root.setAttribute("data-theme", next);
+    localStorage.setItem("theme", next);
   });
-  typeBoot();
 
-  /* ===== uptime + battery ===== */
-  var t0 = Date.now(), clockStarted = false;
-  function startClock() {
-    if (clockStarted) return;
-    clockStarted = true;
-    t0 = Date.now();
-    setInterval(function () {
-      var s = Math.floor((Date.now() - t0) / 1000);
-      var hh = String(Math.floor(s / 3600)).padStart(2, "0");
-      var mm = String(Math.floor(s / 60) % 60).padStart(2, "0");
-      var ss = String(s % 60).padStart(2, "0");
-      document.getElementById("uptime").textContent = hh + ":" + mm + ":" + ss;
-    }, 1000);
+  /* ---------- play clips only while visible ---------- */
+  if ("IntersectionObserver" in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        var v = e.target;
+        if (!v.src) return;
+        if (e.isIntersecting) { var p = v.play(); if (p) p.catch(function () {}); }
+        else v.pause();
+      });
+    }, { threshold: 0.25 });
+    document.querySelectorAll(".clip video").forEach(function (v) { io.observe(v); });
+    window.__clipObserver = io;
   }
-  setInterval(function () {
-    var b = 87 - Math.floor((Date.now() - t0) / 600000);
-    document.getElementById("bat").textContent = Math.max(b, 42) + "%";
-  }, 30000);
 
-  /* ===== telemetry jitter (around real measured values) ===== */
-  function jitter(id, base, spread, digits, prefix) {
-    setInterval(function () {
-      var v = base + (Math.random() - 0.5) * spread;
-      document.getElementById(id).textContent = (prefix || "") + v.toFixed(digits);
-    }, 900 + Math.random() * 600);
-  }
-  jitter("t-dec", 0.39, 0.05, 2);
-  jitter("t-zmq", 21, 4, 0);
-  jitter("t-chk", 2.25, 0.4, 2);
-  jitter("t-fps", 30, 1.4, 0);
-  setInterval(function () {
-    document.getElementById("t-e2e").textContent = "~" + Math.round(130 + (Math.random() - 0.5) * 10);
-  }, 1400);
+  /* ---------- discourage casual saving ---------- */
+  document.querySelectorAll(".clip").forEach(function (c) {
+    c.addEventListener("contextmenu", function (e) { e.preventDefault(); });
+  });
 
-  /* ===== DDS feed ===== */
-  var feed = document.getElementById("feed");
-  var seq = 48000 + Math.floor(Math.random() * 999);
-  var feedTemplates = [
-    function () { return '<span class="topic">rt/lowstate</span> seq=' + (seq++) + ' imu_rpy=[' + r2() + ', ' + r2() + ', ' + r2() + '] ok'; },
-    function () { return '<span class="topic">rt/sportmodestate</span> vel=[' + r2() + ', ' + r2() + '] mode=BALANCED'; },
-    function () { return '<span class="topic">rt/utlidar/cloud</span> pts=' + (9000 + Math.floor(Math.random() * 2500)) + ' frame=odom'; },
-    function () { return '<span class="topic">rt/arm_sdk</span> q29 target committed, tau_ff applied'; },
-    function () { return '<span class="impl">[IMPL]</span> deployed telemetry container → NX :8090, status Up'; },
-    function () { return '<span class="plan">[PLAN]</span> recommend visitor inspect SUBSYS-02 (CudaRobotics)'; },
-    function () { return '<span class="topic">slam/odom</span> pose drift ' + (Math.random() * 0.04).toFixed(3) + ' m — within tolerance'; },
-    function () { return '<span class="impl">[IMPL]</span> chunk handover p50=2.25 ms — exact 3-tick gap @30 Hz'; },
-    function () { return '<span class="topic">nav/astar</span> replanned ' + (12 + Math.floor(Math.random() * 60)) + ' nodes in ' + (Math.random() * 3 + 0.5).toFixed(1) + ' ms'; },
-    function () { return '<span class="plan">[PLAN]</span> all benches faster than estimate. revising priors.'; },
-    function () { return '<span class="topic">teleop/smpl</span> body_params rx, conf=0.' + (88 + Math.floor(Math.random() * 11)); }
-  ];
-  function r2() { return (Math.random() * 2 - 1).toFixed(2); }
-  function ts() {
-    var d = new Date();
-    return [d.getHours(), d.getMinutes(), d.getSeconds()].map(function (x) { return String(x).padStart(2, "0"); }).join(":");
-  }
-  function pushCustom(html) {
-    var div = document.createElement("div");
-    div.className = "line";
-    div.innerHTML = '<span class="t">[' + ts() + ']</span> ' + html;
-    feed.appendChild(div);
-    while (feed.children.length > 14) feed.removeChild(feed.firstChild);
-  }
-  function pushLine() {
-    pushCustom(alertMode
-      ? alertTemplates[Math.floor(Math.random() * alertTemplates.length)]()
-      : feedTemplates[Math.floor(Math.random() * feedTemplates.length)]());
-  }
-  for (var i = 0; i < 10; i++) pushLine();
-  setInterval(pushLine, 1100);
+  /* ---------- unlock hardware footage ---------- */
+  /* Files are AES-256-GCM; the key is PBKDF2-SHA256(password, salt, 600k).
+     Layout per file: salt(16) || iv(12) || ciphertext+tag                */
+  var ITER = 600000;
+  var form = document.getElementById("unlockBar");
+  var input = document.getElementById("pw");
+  var msg = document.getElementById("unlockMsg");
+  var btn = document.getElementById("unlockBtn");
+  var locked = Array.prototype.slice.call(document.querySelectorAll(".clip.locked"));
 
-  /* ===== reboot easter egg ===== */
-  document.getElementById("reboot").addEventListener("click", function (e) {
+  if (!window.crypto || !window.crypto.subtle) {
+    msg.textContent = "This browser can't decrypt the hardware footage — try a modern browser over HTTPS.";
+    input.disabled = btn.disabled = true;
+    return;
+  }
+
+  function deriveKey(password, salt) {
+    return crypto.subtle
+      .importKey("raw", new TextEncoder().encode(password), "PBKDF2", false, ["deriveKey"])
+      .then(function (base) {
+        return crypto.subtle.deriveKey(
+          { name: "PBKDF2", salt: salt, iterations: ITER, hash: "SHA-256" },
+          base,
+          { name: "AES-GCM", length: 256 },
+          false,
+          ["decrypt"]
+        );
+      });
+  }
+
+  function unlockOne(clip, password) {
+    var url = clip.getAttribute("data-enc");
+    clip.classList.add("working");
+    clip.querySelector(".veil .s").textContent = "Decrypting";
+    return fetch(url)
+      .then(function (r) {
+        if (!r.ok) throw new Error("fetch failed");
+        return r.arrayBuffer();
+      })
+      .then(function (buf) {
+        var bytes = new Uint8Array(buf);
+        var salt = bytes.slice(0, 16);
+        var iv = bytes.slice(16, 28);
+        var body = bytes.slice(28);
+        return deriveKey(password, salt).then(function (key) {
+          return crypto.subtle.decrypt({ name: "AES-GCM", iv: iv }, key, body);
+        });
+      })
+      .then(function (plain) {
+        var video = clip.querySelector("video");
+        video.src = URL.createObjectURL(new Blob([plain], { type: "video/mp4" }));
+        video.setAttribute("controls", "");
+        clip.classList.remove("locked", "working");
+        clip.classList.add("unlocked");
+        if (window.__clipObserver) window.__clipObserver.observe(video);
+        var p = video.play(); if (p) p.catch(function () {});
+      });
+  }
+
+  form.addEventListener("submit", function (e) {
     e.preventDefault();
-    location.reload();
+    var password = input.value;
+    if (!password) return;
+
+    form.classList.remove("bad");
+    var oldErr = form.querySelector(".err");
+    if (oldErr) oldErr.remove();
+
+    btn.disabled = input.disabled = true;
+    btn.textContent = "Unlocking…";
+
+    Promise.all(locked.map(function (c) { return unlockOne(c, password); }))
+      .then(function () {
+        form.classList.add("ok");
+        form.querySelector(".ico").textContent = "🔓";
+        msg.textContent = "Hardware footage unlocked.";
+        input.remove();
+        btn.remove();
+      })
+      .catch(function () {
+        locked.forEach(function (c) {
+          c.classList.remove("working");
+          c.querySelector(".veil .s").textContent = "Password required";
+        });
+        form.classList.add("bad");
+        btn.disabled = input.disabled = false;
+        btn.textContent = "Unlock";
+        input.value = "";
+        input.focus();
+        var err = document.createElement("div");
+        err.className = "err";
+        err.textContent = "Incorrect password — try again.";
+        form.appendChild(err);
+      });
   });
-
-  var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-  /* ===== LiDAR sweep background ===== */
-  (function lidarBg() {
-    var cv = document.getElementById("lidar");
-    if (reduced) { cv.style.display = "none"; return; }
-    var ctx = cv.getContext("2d");
-    var pts = [], angle = 0;
-    function resize() { cv.width = innerWidth; cv.height = innerHeight; }
-    resize();
-    addEventListener("resize", resize);
-    function frame() {
-      ctx.clearRect(0, 0, cv.width, cv.height);
-      var cx = cv.width * 0.78, cy = cv.height * 0.30;
-      var maxR = Math.max(cv.width, cv.height) * 0.7;
-      angle += 0.016;
-      // sweep beam
-      var beamColor = alertMode ? "255, 82, 82" : "74, 246, 38";
-      var grad = ctx.createLinearGradient(cx, cy, cx + Math.cos(angle) * maxR, cy + Math.sin(angle) * maxR);
-      grad.addColorStop(0, "rgba(" + beamColor + ", 0.20)");
-      grad.addColorStop(1, "rgba(" + beamColor + ", 0)");
-      ctx.strokeStyle = grad;
-      ctx.lineWidth = 1.5;
-      ctx.beginPath();
-      ctx.moveTo(cx, cy);
-      ctx.lineTo(cx + Math.cos(angle) * maxR, cy + Math.sin(angle) * maxR);
-      ctx.stroke();
-      // spawn returns along the beam — fake walls give it structure
-      if (Math.random() < 0.85) {
-        var wall = 0.45 + 0.25 * Math.sin(angle * 3.1) + 0.12 * Math.sin(angle * 7.7);
-        var r = maxR * wall * (0.97 + Math.random() * 0.06);
-        pts.push({ x: cx + Math.cos(angle) * r, y: cy + Math.sin(angle) * r, a: 0.85 });
-      }
-      for (var i = pts.length - 1; i >= 0; i--) {
-        var p = pts[i];
-        p.a -= 0.004;
-        if (p.a <= 0) { pts.splice(i, 1); continue; }
-        ctx.fillStyle = "rgba(" + beamColor + ", " + p.a.toFixed(3) + ")";
-        ctx.fillRect(p.x, p.y, 2, 2);
-      }
-      // rings
-      ctx.strokeStyle = "rgba(" + beamColor + ", 0.05)";
-      ctx.lineWidth = 1;
-      for (var ring = 1; ring <= 3; ring++) {
-        ctx.beginPath();
-        ctx.arc(cx, cy, maxR * 0.25 * ring, 0, Math.PI * 2);
-        ctx.stroke();
-      }
-      requestAnimationFrame(frame);
-    }
-    frame();
-  })();
-
-  /* ===== title glitch ===== */
-  (function glitch() {
-    var el = document.getElementById("name");
-    var original = el.textContent;
-    var chars = "!<>-_\\/[]{}—=+*^?#@%░▒▓█";
-    if (reduced) return;
-    setInterval(function () {
-      if (Math.random() < 0.65 && !alertMode) return;
-      var n = 1 + Math.floor(Math.random() * 3), txt = original.split("");
-      for (var i = 0; i < n; i++) {
-        txt[Math.floor(Math.random() * txt.length)] = chars.charAt(Math.floor(Math.random() * chars.length));
-      }
-      el.textContent = txt.join("");
-      setTimeout(function () { el.textContent = original; }, 90 + Math.random() * 140);
-    }, alertMode ? 600 : 2200);
-  })();
-
-  /* ===== card hover → feed reaction ===== */
-  document.querySelectorAll(".card").forEach(function (card) {
-    var label = (card.querySelector(".sub") || {}).textContent || "SUBSYS-??";
-    var armed = true;
-    card.addEventListener("mouseenter", function () {
-      if (!armed) return;
-      armed = false;
-      pushCustom('<span class="topic">hud/focus</span> visitor inspecting ' + label.split("·")[0].trim() + " — logging interest");
-      setTimeout(function () { armed = true; }, 8000);
-    });
-  });
-
-  /* ===== konami → manual override (red alert) ===== */
-  var alertMode = false;
-  var alertTemplates = [
-    function () { return '<span class="impl">[OVERRIDE]</span> safety interlocks DISENGAGED by visitor'; },
-    function () { return '<span class="topic">rt/alarm</span> thermal margins exceeded — who pressed that'; },
-    function () { return '<span class="plan">[PLAN]</span> strongly advise re-engaging interlocks'; },
-    function () { return '<span class="topic">rt/lowstate</span> seq=' + (seq++) + ' torque limits UNLOCKED'; },
-    function () { return '<span class="impl">[IMPL]</span> it was like this when I got here'; }
-  ];
-  var konami = [38, 38, 40, 40, 37, 39, 37, 39, 66, 65], kpos = 0;
-  function setAlert(on) {
-    alertMode = on;
-    document.body.classList.toggle("alert", on);
-    document.getElementById("sysstat").textContent = on ? "MANUAL OVERRIDE" : "ONLINE";
-    document.title = on ? "⚠ MANUAL OVERRIDE · G1 CONTROL HUB" : "KRISHNA · G1 CONTROL HUB";
-    pushCustom(on
-      ? '<span class="impl">[OVERRIDE]</span> MANUAL OVERRIDE ENGAGED — all limits lifted. konami accepted.'
-      : '<span class="impl">[SYS]</span> override released — returning to nominal. nothing happened.');
-  }
-  window.addEventListener("keydown", function (e) {
-    kpos = (e.keyCode === konami[kpos]) ? kpos + 1 : (e.keyCode === konami[0] ? 1 : 0);
-    if (kpos === konami.length) { kpos = 0; setAlert(!alertMode); }
-  });
-
-  /* ===== operator console ===== */
-  var con = document.getElementById("console");
-  var cbody = document.getElementById("cbody");
-  var cinput = document.getElementById("cinput");
-  function cprint(text, cls) {
-    var div = document.createElement("div");
-    if (cls) div.className = cls;
-    div.textContent = text;
-    cbody.appendChild(div);
-    cbody.scrollTop = cbody.scrollHeight;
-  }
-  function toggleConsole(open) {
-    var willOpen = open !== undefined ? open : !con.classList.contains("open");
-    con.classList.toggle("open", willOpen);
-    if (willOpen) {
-      if (!cbody.children.length) {
-        cprint("G1 OPERATOR CONSOLE — type 'help'. you are not the operator, but try anyway.", "sys");
-      }
-      setTimeout(function () { cinput.focus(); }, 200);
-    } else {
-      cinput.blur();
-    }
-  }
-  window.addEventListener("keydown", function (e) {
-    if (e.key === "`" && document.activeElement !== cinput) { e.preventDefault(); toggleConsole(); }
-    if (e.key === "Escape" && con.classList.contains("open")) toggleConsole(false);
-  });
-  document.getElementById("conhint").addEventListener("click", function () { toggleConsole(); });
-  var commands = {
-    help: function () {
-      cprint("commands: whoami · ls · telemetry · gait <mode> · override · contact · sudo <cmd> · clear · reboot · exit", "sys");
-    },
-    whoami: function () {
-      cprint("visitor (uid 1001). operator 'krishna' is busy retargeting SMPL poses. leave a message: krishnaguptarobotics@gmail.com");
-    },
-    ls: function () {
-      cprint("subsystems/\n  01 slam-web-v2        [ACTIVE]\n  02 CudaRobotics       [ACTIVE]\n  03 sage               [ACTIVE]\n  04 livox_driver_g1    [ACTIVE]\n  05 nav-autonomy       [ACTIVE]\n  0X ████████           [REDACTED]");
-    },
-    telemetry: function () {
-      cprint("policy decode 0.39 ms · zmq pipe 21 µs · chunk handover p50 2.25 ms · wbc 30 Hz · motor cmd 1 kHz · photon→motion ~130 ms\nall numbers real. measured 2026-05-15. faster than the estimates, every single one.", "hi");
-    },
-    gait: function (arg) {
-      if (!arg) { cprint("usage: gait <walk|run|backflip>", "sys"); return; }
-      if (arg === "backflip") { cprint("engaging backflip............ [DENIED] insurance says no.", "err"); return; }
-      cprint("engaging gait '" + arg + "'..... [DENIED] safety interlock — visitor lacks motor authority.", "err");
-    },
-    override: function () {
-      cprint("manual override requires the konami code. you know what to do. ↑↑↓↓←→←→BA", "sys");
-    },
-    contact: function () {
-      cprint("uplink: krishnaguptarobotics@gmail.com · github.com/robomantri", "hi");
-    },
-    clear: function () { cbody.innerHTML = ""; },
-    reboot: function () { cprint("rebooting...", "sys"); setTimeout(function () { location.reload(); }, 600); },
-    exit: function () { toggleConsole(false); },
-    konami: function () { commands.override(); }
-  };
-  cinput.addEventListener("keydown", function (e) {
-    if (e.key !== "Enter") return;
-    var raw = cinput.value.trim();
-    cinput.value = "";
-    if (!raw) return;
-    cprint("visitor@g1:~$ " + raw, "sys");
-    var parts = raw.toLowerCase().split(/\s+/);
-    if (parts[0] === "sudo") {
-      if (parts[1] === "rm" || raw.includes("rm -rf")) { cprint("nice try. joints locked, filesystem read-only, robot unimpressed.", "err"); return; }
-      cprint("visitor is not in the sudoers file. this incident will be published to rt/alarm.", "err");
-      pushCustom('<span class="topic">rt/alarm</span> unauthorized sudo attempt by visitor — logged');
-      return;
-    }
-    if (raw.includes("rm -rf")) { cprint("nice try. joints locked, filesystem read-only, robot unimpressed.", "err"); return; }
-    var fn = commands[parts[0]];
-    if (fn) { fn(parts[1]); } else { cprint("unknown command: " + parts[0] + " — try 'help'", "err"); }
-  });
-
-  /* ===== blinking LED favicon ===== */
-  (function favicon() {
-    var link = document.createElement("link");
-    link.rel = "icon";
-    document.head.appendChild(link);
-    var fc = document.createElement("canvas");
-    fc.width = 32; fc.height = 32;
-    var fx = fc.getContext("2d");
-    var on = true;
-    function draw() {
-      fx.clearRect(0, 0, 32, 32);
-      fx.fillStyle = "#050a07";
-      fx.fillRect(0, 0, 32, 32);
-      fx.fillStyle = alertMode ? "#ff5252" : "#4af626";
-      fx.globalAlpha = on ? 1 : 0.25;
-      fx.beginPath();
-      fx.arc(16, 16, 8, 0, Math.PI * 2);
-      fx.fill();
-      fx.globalAlpha = 1;
-      link.href = fc.toDataURL("image/png");
-      on = !on;
-    }
-    draw();
-    setInterval(draw, 1200);
-  })();
 })();
 </script>
 </body>
