@@ -120,7 +120,28 @@
     background: linear-gradient(100deg, var(--accent), var(--accent-2));
     -webkit-background-clip: text; background-clip: text; color: transparent;
   }
-  .hero .lede { margin-top: 1.35rem; max-width: 60ch; color: var(--text-2); font-size: 1.09rem; }
+  .hero .lede { margin-top: 1.35rem; max-width: 54ch; color: var(--text-2); font-size: 1.09rem; }
+  .hero-grid {
+    display: grid; grid-template-columns: minmax(0, 1fr) 380px;
+    gap: 3rem; align-items: center;
+  }
+  .hero-media { position: relative; justify-self: end; }
+  .hero-media img {
+    width: 100%; height: auto;
+    /* fade the base into the page so it reads as art, not a pasted PNG */
+    -webkit-mask-image: linear-gradient(to bottom, #000 68%, transparent 99%);
+    mask-image: linear-gradient(to bottom, #000 68%, transparent 99%);
+  }
+  /* the render is near-black; lift it off a light background */
+  :root:not([data-theme="dark"]) .hero-media img { filter: drop-shadow(0 18px 45px rgba(20,22,27,0.22)); }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) .hero-media img { filter: none; }
+  }
+  :root[data-theme="dark"] .hero-media img { filter: none; }
+  @media (max-width: 900px) {
+    .hero-grid { grid-template-columns: 1fr; gap: 2rem; }
+    .hero-media { display: none; }
+  }
   .hero-actions { display: flex; gap: 0.7rem; flex-wrap: wrap; margin-top: 2rem; }
   .btn {
     display: inline-flex; align-items: center; gap: 0.45rem;
@@ -454,18 +475,28 @@
 
   <!-- ===== HERO ===== -->
   <section class="hero">
-    <div class="status">Robotics Engineer</div>
-    <h1>Humanoid autonomy, <em>perception to torque</em>.</h1>
-    <p class="lede">
-      Teleoperation, whole-body control and policy deployment on the 29-DoF
-      Unitree G1 at Kayaa. Previously mobile robots and embedded systems at
-      Rigbetellabs.
-    </p>
-    <div class="hero-actions">
-      <a class="btn primary" href="#work">Watch the demos</a>
-      <a class="btn ghost" href="resume.pdf" target="_blank" rel="noopener">Resume ↗</a>
-      <a class="btn ghost" href="https://github.com/robomantri" target="_blank" rel="noopener">GitHub ↗</a>
-      <a class="btn ghost" href="mailto:krishnaguptarobotics@gmail.com">Email</a>
+    <div class="hero-grid">
+      <div>
+        <div class="status">Robotics Engineer</div>
+        <h1>Humanoid autonomy, <em>perception to torque</em>.</h1>
+        <p class="lede">
+          Simulation, teleoperation and policy deployment on the 29-DoF Unitree G1
+          at Kayaa — trained in Isaac Sim and MuJoCo, validated on hardware.
+          Previously mobile robots and embedded systems at Rigbetellabs.
+        </p>
+        <div class="hero-actions">
+          <a class="btn primary" href="#work">Watch the demos</a>
+          <a class="btn ghost" href="resume.pdf" target="_blank" rel="noopener">Resume ↗</a>
+          <a class="btn ghost" href="https://github.com/robomantri" target="_blank" rel="noopener">GitHub ↗</a>
+          <a class="btn ghost" href="mailto:krishnaguptarobotics@gmail.com">Email</a>
+        </div>
+      </div>
+      <div class="hero-media" aria-hidden="true">
+        <picture>
+          <source srcset="humanoid.webp" type="image/webp">
+          <img src="humanoid.png" alt="" width="900" height="1034" loading="eager" decoding="async">
+        </picture>
+      </div>
     </div>
 
     <div class="metrics">
@@ -718,18 +749,26 @@
     </div>
     <div class="skills">
       <div class="skill">
-        <h3>Control &amp; teleoperation</h3>
+        <h3>Simulation &amp; sim-to-real</h3>
         <div class="pills">
-          <span class="pill">Whole-body control</span><span class="pill">NVIDIA SONIC</span>
-          <span class="pill">Motion retargeting</span><span class="pill">Quest 3</span>
+          <span class="pill">Isaac Sim</span><span class="pill">Isaac Gym</span>
+          <span class="pill">MuJoCo</span><span class="pill">URDF</span>
+          <span class="pill">Sim-to-real transfer</span>
         </div>
       </div>
       <div class="skill">
         <h3>Learning</h3>
         <div class="pills">
           <span class="pill">GR00T N1.7</span><span class="pill">Imitation learning</span>
-          <span class="pill">Isaac Sim / Gym</span><span class="pill">MuJoCo</span>
-          <span class="pill">LLM / RAG</span><span class="pill">STT / TTS</span>
+          <span class="pill">Locomotion policies</span><span class="pill">PyTorch</span>
+          <span class="pill">LLM / RAG</span>
+        </div>
+      </div>
+      <div class="skill">
+        <h3>Control &amp; teleoperation</h3>
+        <div class="pills">
+          <span class="pill">Whole-body control</span><span class="pill">NVIDIA SONIC</span>
+          <span class="pill">Motion retargeting</span><span class="pill">Manipulation</span>
         </div>
       </div>
       <div class="skill">
