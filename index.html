@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Krishna Gupta — Robotics Engineer</title>
-<meta name="description" content="Krishna Gupta (robomantri) — robotics engineer building humanoid autonomy: VR teleoperation, whole-body control and VLA policy deployment on the 29-DoF Unitree G1.">
+<meta name="description" content="Krishna Gupta (robomantri) — robotics engineer building humanoid autonomy: VR teleoperation, whole-body control, conversational AI on the edge, and VLA policy deployment on the 29-DoF Unitree G1.">
 <style>
   :root {
     --bg: #ffffff;
@@ -132,8 +132,7 @@
     display: inline-flex; align-items: center; gap: 0.45rem;
     padding: 0.7rem 1.25rem; border-radius: 10px;
     font-size: 0.92rem; font-weight: 600; text-decoration: none;
-    border: 1px solid transparent; cursor: pointer;
-    font-family: inherit;
+    border: 1px solid transparent; cursor: pointer; font-family: inherit;
     transition: transform 0.14s, background 0.16s, border-color 0.16s, box-shadow 0.16s;
   }
   .btn:hover { transform: translateY(-2px); }
@@ -160,6 +159,20 @@
     .metric:last-child { border-bottom: none; }
   }
 
+  /* ============ APPROACH ============ */
+  .approach { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.1rem; }
+  .ap {
+    border: 1px solid var(--border); border-radius: 14px;
+    background: var(--surface); padding: 1.4rem;
+    position: relative; overflow: hidden;
+  }
+  .ap::before {
+    content: ""; position: absolute; left: 0; top: 1.4rem; bottom: 1.4rem;
+    width: 2px; background: linear-gradient(var(--accent), transparent);
+  }
+  .ap h3 { font-size: 1rem; font-weight: 700; letter-spacing: -0.01em; margin-bottom: 0.45rem; }
+  .ap p { color: var(--text-2); font-size: 0.9rem; }
+
   /* ============ SECTIONS ============ */
   section { padding: 4.5rem 0; }
   .sec-head { margin-bottom: 2rem; max-width: 62ch; }
@@ -174,11 +187,22 @@
   .sec-head p { color: var(--text-2); margin-top: 0.6rem; }
   .rule { height: 1px; background: var(--border); }
 
+  .group-head {
+    display: flex; align-items: center; gap: 0.8rem;
+    margin: 2.6rem 0 1.3rem;
+  }
+  .group-head:first-of-type { margin-top: 0; }
+  .group-head h3 {
+    font-size: 0.82rem; font-weight: 700; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--text-2); white-space: nowrap;
+  }
+  .group-head .ln { height: 1px; background: var(--border); flex: 1; }
+
   /* ============ UNLOCK BAR ============ */
   .unlock {
     display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;
     border: 1px solid var(--border); border-radius: 12px;
-    background: var(--surface-2); padding: 0.9rem 1.1rem; margin-bottom: 1.9rem;
+    background: var(--surface-2); padding: 0.9rem 1.1rem;
   }
   .unlock .ico { color: var(--accent); font-size: 1.05rem; }
   .unlock .msg { font-size: 0.89rem; color: var(--text-2); flex: 1; min-width: 210px; }
@@ -194,22 +218,23 @@
   .unlock.bad input { border-color: #ef4444; }
   .unlock .err { color: #ef4444; font-size: 0.85rem; width: 100%; }
 
-  /* ============ VIDEO SHOWCASE ============ */
-  .reel { display: grid; gap: 1.75rem; }
+  /* ============ CLIPS ============ */
   .reel-row {
     display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;
     border: 1px solid var(--border); border-radius: 16px;
     background: var(--surface); padding: 1rem; box-shadow: var(--shadow-sm);
+    margin-bottom: 1.5rem;
   }
-  .reel-row.single { grid-template-columns: 1fr; }
-  .reel-head {
-    grid-column: 1 / -1; padding: 0.25rem 0.35rem 0.6rem;
-  }
+  .reel-head { grid-column: 1 / -1; padding: 0.25rem 0.35rem 0.6rem; }
   .reel-head h3 { font-size: 1.05rem; font-weight: 700; letter-spacing: -0.012em; }
-  .reel-head p { color: var(--text-2); font-size: 0.87rem; max-width: 62ch; margin-top: 0.2rem; }
+  .reel-head p { color: var(--text-2); font-size: 0.87rem; max-width: 64ch; margin-top: 0.2rem; }
 
-  .clip { position: relative; border-radius: 11px; overflow: hidden; background: #05060a; }
-  .clip video { width: 100%; aspect-ratio: 16/9; object-fit: cover; }
+  .clip {
+    position: relative; border-radius: 11px; overflow: hidden;
+    background: #05060a; aspect-ratio: var(--ar, 16/9);
+  }
+  /* contain, never crop -- these clips are square/portrait/wide and all differ */
+  .clip video { width: 100%; height: 100%; object-fit: contain; background: #05060a; }
   .clip .label {
     position: absolute; top: 0.6rem; left: 0.6rem; z-index: 3;
     background: rgba(5,6,10,0.72); backdrop-filter: blur(6px);
@@ -220,7 +245,6 @@
   .clip .label.real { border-color: rgba(34,197,94,0.5); color: #86efac; }
   .clip .label.sim { border-color: rgba(139,140,247,0.5); color: #c7c7ff; }
 
-  /* locked state */
   .clip.locked .preview {
     position: absolute; inset: 0; width: 100%; height: 100%;
     object-fit: cover; transform: scale(1.15);
@@ -231,30 +255,58 @@
     position: absolute; inset: 0; z-index: 2;
     display: flex; flex-direction: column; align-items: center; justify-content: center;
     gap: 0.35rem; text-align: center; padding: 1rem;
-    background: rgba(5,6,10,0.32);
-    transition: opacity 0.35s;
+    background: rgba(5,6,10,0.32); transition: opacity 0.35s;
   }
   .clip .veil .lockico { font-size: 1.5rem; }
-  .clip .veil .t {
-    color: #f2f3f7; font-size: 0.86rem; font-weight: 650;
-    text-shadow: 0 1px 6px rgba(0,0,0,0.6);
-  }
-  .clip .veil .s {
-    color: rgba(242,243,247,0.72); font-size: 0.76rem;
-    text-shadow: 0 1px 6px rgba(0,0,0,0.6);
-  }
+  .clip .veil .t { color: #f2f3f7; font-size: 0.86rem; font-weight: 650; text-shadow: 0 1px 6px rgba(0,0,0,0.6); }
+  .clip .veil .s { color: rgba(242,243,247,0.72); font-size: 0.76rem; text-shadow: 0 1px 6px rgba(0,0,0,0.6); }
   .clip.unlocked .veil, .clip.unlocked .preview { opacity: 0; pointer-events: none; }
   .clip.unlocked video { visibility: visible; }
-  .clip.working .veil .s::after {
-    content: ""; animation: dots 1.2s steps(4, end) infinite;
-  }
+  .clip.working .veil .s::after { content: ""; animation: dots 1.2s steps(4, end) infinite; }
   @keyframes dots { 0% { content: ""; } 25% { content: "."; } 50% { content: ".."; } 75% { content: "..."; } }
+
+  /* ============ REELS (portrait) ============ */
+  .reel-stage {
+    border: 1px solid var(--border); border-radius: 16px;
+    background: var(--surface); padding: 1rem; box-shadow: var(--shadow-sm);
+    margin-bottom: 1.5rem;
+  }
+  .reel-stage .reel-head { padding: 0.25rem 0.35rem 0.9rem; }
+  .reel-deck {
+    display: flex; gap: 1.1rem; flex-wrap: wrap; justify-content: center;
+  }
+  .reel-deck .clip { width: 300px; max-width: 100%; border-radius: 14px; }
+  .reel-deck .cap {
+    text-align: center; font-size: 0.82rem; color: var(--text-2); margin-top: 0.55rem;
+  }
+  .reel-item { width: 300px; max-width: 100%; }
+
+  /* 2s cinematic reveal for the showcase reel */
+  @keyframes reelReveal {
+    0%   { opacity: 0; transform: scale(1.14); filter: blur(22px) brightness(0.35); }
+    55%  { opacity: 1; }
+    100% { opacity: 1; transform: scale(1);    filter: blur(0)    brightness(1);    }
+  }
+  .clip.revealing video { animation: reelReveal 2s cubic-bezier(0.22, 0.61, 0.36, 1) both; }
+
+  .sound-btn {
+    position: absolute; z-index: 4; right: 0.6rem; bottom: 0.6rem;
+    width: 38px; height: 38px; border-radius: 50%;
+    display: none; place-items: center; cursor: pointer;
+    background: rgba(5,6,10,0.66); backdrop-filter: blur(6px);
+    border: 1px solid rgba(255,255,255,0.18); color: #f2f3f7; font-size: 1rem;
+    transition: transform 0.14s, background 0.16s;
+  }
+  .sound-btn:hover { transform: scale(1.08); background: rgba(5,6,10,0.85); }
+  .clip.unlocked .sound-btn.on { display: grid; }
+
   @media (max-width: 720px) { .reel-row { grid-template-columns: 1fr; } }
 
   /* ============ EXPERIENCE ============ */
   .xp {
     border: 1px solid var(--border); border-radius: 16px;
     background: var(--surface); padding: 1.9rem; box-shadow: var(--shadow-sm);
+    margin-bottom: 1.3rem;
   }
   .xp-top {
     display: flex; align-items: flex-start; justify-content: space-between;
@@ -322,6 +374,7 @@
   @media (prefers-reduced-motion: reduce) {
     * { animation: none !important; transition: none !important; }
     html { scroll-behavior: auto; }
+    .clip.revealing video { animation: none !important; }
   }
 </style>
 </head>
@@ -331,6 +384,7 @@
   <div class="nav-inner">
     <a class="brand" href="#top"><span class="dot"></span>Krishna Gupta</a>
     <nav class="nav-links">
+      <a href="#approach">Approach</a>
       <a href="#work">Work</a>
       <a href="#experience">Experience</a>
       <a href="#skills">Skills</a>
@@ -349,8 +403,9 @@
     <h1>Turning human intent into <em>humanoid motion</em>.</h1>
     <p class="lede">
       I build the full stack between perception and torque on 29-DoF humanoids —
-      VR and webcam teleoperation, whole-body control, and vision-language-action
-      policies deployed to real hardware.
+      VR and webcam teleoperation, whole-body control, on-device conversational AI,
+      and vision-language-action policies deployed to real hardware. Mostly from
+      scratch, usually on hardware that wasn't meant to do it yet.
     </p>
     <div class="hero-actions">
       <a class="btn primary" href="#work">Watch the demos</a>
@@ -367,12 +422,37 @@
     </div>
   </section>
 
-  <!-- ===== VIDEO SHOWCASE ===== -->
+  <!-- ===== APPROACH ===== -->
+  <section id="approach">
+    <div class="sec-head">
+      <div class="tag">How I build</div>
+      <h2>From first principles, onto real hardware</h2>
+      <p>Most of what's on this page started as an empty repo or a bare microcontroller. I'd rather understand a system end to end than wire together things I can't debug.</p>
+    </div>
+    <div class="approach">
+      <div class="ap">
+        <h3>Built from scratch</h3>
+        <p>Teleoperation stacks, cognitive architectures, embedded firmware — designed and written from the ground up, not assembled from black boxes.</p>
+      </div>
+      <div class="ap">
+        <h3>Work around the constraint</h3>
+        <p>No encoders on the arm, so I tapped the analog potentiometer inside modified servos and read joint angles straight off it. The way through is usually one layer lower than expected.</p>
+      </div>
+      <div class="ap">
+        <h3>Proven on hardware</h3>
+        <p>Simulation is the checkpoint, never the finish line. Every pipeline here runs on a physical robot — and the footage to prove it is on this page.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="rule"></div>
+
+  <!-- ===== WORK ===== -->
   <section id="work">
     <div class="sec-head">
       <div class="tag">Selected work</div>
       <h2>Simulation, then hardware</h2>
-      <p>Every pipeline below is validated twice — first in simulation, then live on the physical G1. Hardware footage is password-protected.</p>
+      <p>Every pipeline below is validated twice — first in simulation, then live on the physical robot. Hardware footage is password-protected.</p>
     </div>
 
     <form class="unlock" id="unlockBar" autocomplete="off">
@@ -382,75 +462,94 @@
       <button class="btn primary" type="submit" id="unlockBtn">Unlock</button>
     </form>
 
-    <div class="reel">
+    <div class="group-head"><h3>Humanoid autonomy · Kayaa</h3><span class="ln"></span></div>
 
-      <div class="reel-row">
-        <div class="reel-head">
-          <h3>Teleoperated imitation from a single webcam</h3>
-          <p>Monocular human pose estimation retargeted to the 29-DoF humanoid and executed through whole-body control — no motion capture suit, no markers.</p>
-        </div>
-        <div class="clip">
-          <video src="videos/teleop-webcam-sim.mp4" autoplay muted loop playsinline preload="metadata"
-                 controlslist="nodownload" disablepictureinpicture></video>
-          <span class="label sim">Simulation</span>
-        </div>
-        <div class="clip locked" data-enc="videos/teleop-webcam-real.mp4.enc">
-          <img class="preview" alt="" aria-hidden="true"
-               src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAwICQsJCAwLCgsODQwOEh4UEhEREiUbHBYeLCcuLisnKyoxN0Y7MTRCNCorPVM+QkhKTk9OLztWXFVMW0ZNTkv/2wBDAQ0ODhIQEiQUFCRLMisyS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0v/wAARCAAwADADASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwBPJYcjkU2JJZpsKOK0LdkZSCKpW19Ha3zL1BNClYTjc0DpfmRZb7wrPj3Jc+VJwBWyNUQjhTWFqM+6+BAxmlK7BWRuSaaskAIYVBFpQB4NZ0d3ch9qkkVciu7pP4DWcFNL3mN2IBdQpE2zrisS1lJ1Is67lzVpeBioJmEfKdasZ0Iu4gOIxWPeXQe+UhRio0kldQc1TklK3il+lAjajuTG24KKf/aUgPQVVDqQMUjYIoAqyMUqi0xEnz9KuX2Y5MVQdd7UwLYvFRQFGapXUrysCFxU6RU/ygOtAD7OVjGA3WrHmEVDHgDihnoA/9k=">
-          <video muted loop playsinline preload="none"
-                 controlslist="nodownload" disablepictureinpicture></video>
-          <span class="label real">Real robot</span>
-          <div class="veil">
-            <div class="lockico">🔒</div>
-            <div class="t">Hardware footage</div>
-            <div class="s">Password required</div>
+    <div class="reel-row">
+      <div class="reel-head">
+        <h3>Teleoperated imitation from a single webcam</h3>
+        <p>Monocular human pose estimation retargeted to the 29-DoF humanoid and executed through whole-body control — no motion capture suit, no markers.</p>
+      </div>
+      <div class="clip" style="--ar: 848/430">
+        <video src="videos/teleop-webcam-sim.mp4" autoplay muted loop playsinline preload="metadata"
+               controlslist="nodownload" disablepictureinpicture></video>
+        <span class="label sim">Simulation</span>
+      </div>
+      <div class="clip locked" style="--ar: 368/368" data-enc="videos/teleop-webcam-real.mp4.enc">
+        <img class="preview" alt="" aria-hidden="true"
+             src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAwICQsJCAwLCgsODQwOEh4UEhEREiUbHBYeLCcuLisnKyoxN0Y7MTRCNCorPVM+QkhKTk9OLztWXFVMW0ZNTkv/2wBDAQ0ODhIQEiQUFCRLMisyS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0v/wAARCAAwADADASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwBPJYcjkU2JJZpsKOK0LdkZSCKpW19Ha3zL1BNClYTjc0DpfmRZb7wrPj3Jc+VJwBWyNUQjhTWFqM+6+BAxmlK7BWRuSaaskAIYVBFpQB4NZ0d3ch9qkkVciu7pP4DWcFNL3mN2IBdQpE2zrisS1lJ1Is67lzVpeBioJmEfKdasZ0Iu4gOIxWPeXQe+UhRio0kldQc1TklK3il+lAjajuTG24KKf/aUgPQVVDqQMUjYIoAqyMUqi0xEnz9KuX2Y5MVQdd7UwLYvFRQFGapXUrysCFxU6RU/ygOtAD7OVjGA3WrHmEVDHgDihnoA/9k=">
+        <video muted loop playsinline preload="none" controlslist="nodownload" disablepictureinpicture></video>
+        <span class="label real">Real robot</span>
+        <div class="veil"><div class="lockico">🔒</div><div class="t">Hardware footage</div><div class="s">Password required</div></div>
+      </div>
+    </div>
+
+    <div class="reel-row">
+      <div class="reel-head">
+        <h3>Vision-language-action policy deployment</h3>
+        <p>GR00T N1.7 VLA fine-tuned on a new embodiment through an imitation-learning data pipeline, then exported and run on edge compute — sim-trained, hardware-proven.</p>
+      </div>
+      <div class="clip" style="--ar: 410/410">
+        <video src="videos/vla-sim.mp4" autoplay muted loop playsinline preload="metadata"
+               controlslist="nodownload" disablepictureinpicture></video>
+        <span class="label sim">Simulation</span>
+      </div>
+      <div class="clip locked" style="--ar: 832/464" data-enc="videos/vla-real.mp4.enc">
+        <img class="preview" alt="" aria-hidden="true"
+             src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAwICQsJCAwLCgsODQwOEh4UEhEREiUbHBYeLCcuLisnKyoxN0Y7MTRCNCorPVM+QkhKTk9OLztWXFVMW0ZNTkv/2wBDAQ0ODhIQEiQUFCRLMisyS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0v/wAARCAAbADADASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDh7IKZwW6CuutkS7jQY+UVx9ouJl3dM16BYxxS2aCHg4613z3EXLbT4VQEVS8R6eHs96DpVsB4LZhuJaqIvp5Ymt3TOe9RYlnDyAqxBqN3wK1dQ06ZJGOw4+lZFzGyDBBFEV7xKL4spfMHy13GhwLHaLnrWMQM9K19OJ2DmsXV1PUqYNRV7mn5YPaqssKo+QtaUYG0UjKCegrdHC4FKNI5hh0B/CsPxJpEPk74kwfaupVQD0FR3SKycgGrTsLlP//Z">
+        <video muted loop playsinline preload="none" controlslist="nodownload" disablepictureinpicture></video>
+        <span class="label real">Real robot</span>
+        <div class="veil"><div class="lockico">🔒</div><div class="t">Hardware footage</div><div class="s">Password required</div></div>
+      </div>
+    </div>
+
+    <div class="reel-stage">
+      <div class="reel-head">
+        <h3>Custom imitation-learning choreography</h3>
+        <p>A full dance sequence learned from human demonstration and replayed on hardware — a stress test for long-horizon whole-body tracking and balance. Best with sound on.</p>
+      </div>
+      <div class="reel-deck">
+        <div class="reel-item">
+          <div class="clip locked" style="--ar: 576/1024" data-enc="videos/imitation-dance.mp4.enc" data-reveal="1" data-audio="1">
+            <img class="preview" alt="" aria-hidden="true"
+                 src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAwICQsJCAwLCgsODQwOEh4UEhEREiUbHBYeLCcuLisnKyoxN0Y7MTRCNCorPVM+QkhKTk9OLztWXFVMW0ZNTkv/2wBDAQ0ODhIQEiQUFCRLMisyS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0v/wAARCABVADADASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDiEhJ6VYFo5GcGrkUKhu1XeVTGBUgY32cilEZQ5rWjtWmbjvTL2xa3Xc1K4LUz/tLkbRUDxu5yRVuwiEsxyOM1sGxTHApg9CnY2Dbt7vwKvXNuGj+9gCqcjyJBlTUkLNMgVm5NOwPUY8jWygwksaLq6kuIf3o7VO9sYYWZsVVhAnBLuMUtWCVipp84SUqRjJroIixizVSPTLYp5qvkilS/CDYF4FOwnqYqasoARjkU6TVY0IKnBFZMdmJMfNV9NPtxGNzZar0sMbdazJOmwMcGks0mEZbnBrXh0OGSNXiIPrWtDobBFBZdvpUtpAYFnqAhiZZDTJLrIJGMVo6toaPIqQsAc81W1XRxBbxqjc45pMasR2+iTc5OKeujrG2ZZ+PrUJvriTq5FKpZ/vMTQm0Dd9WacF3b2MZWMljVJ9Xumn3BiE9Kj2A9qPKHegRHLeTST7wx607UbqWdE2scgVE0iB9tMMgJxQAIKsR4FU1kqQPQBdBpGbiq4l4pDLQArQqW3d6rGPa5OalaWoHl5oAYpp4Y0UUAOyaCaKKAI3Y1AxNFFAH/2Q==">
+            <video muted loop playsinline preload="none" controlslist="nodownload" disablepictureinpicture></video>
+            <span class="label real">Real robot</span>
+            <button class="sound-btn" type="button" aria-label="Toggle sound" title="Toggle sound">🔊</button>
+            <div class="veil"><div class="lockico">🔒</div><div class="t">Hardware footage</div><div class="s">Password required</div></div>
           </div>
         </div>
       </div>
+    </div>
 
-      <div class="reel-row">
-        <div class="reel-head">
-          <h3>Vision-language-action policy deployment</h3>
-          <p>GR00T N1.7 VLA fine-tuned on a new embodiment through an imitation-learning data pipeline, then exported and run on edge compute — sim-trained, hardware-proven.</p>
-        </div>
-        <div class="clip">
-          <video src="videos/vla-sim.mp4" autoplay muted loop playsinline preload="metadata"
-                 controlslist="nodownload" disablepictureinpicture></video>
-          <span class="label sim">Simulation</span>
-        </div>
-        <div class="clip locked" data-enc="videos/vla-real.mp4.enc">
-          <img class="preview" alt="" aria-hidden="true"
-               src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAwICQsJCAwLCgsODQwOEh4UEhEREiUbHBYeLCcuLisnKyoxN0Y7MTRCNCorPVM+QkhKTk9OLztWXFVMW0ZNTkv/2wBDAQ0ODhIQEiQUFCRLMisyS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0v/wAARCAAbADADASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDh7IKZwW6CuutkS7jQY+UVx9ouJl3dM16BYxxS2aCHg4613z3EXLbT4VQEVS8R6eHs96DpVsB4LZhuJaqIvp5Ymt3TOe9RYlnDyAqxBqN3wK1dQ06ZJGOw4+lZFzGyDBBFEV7xKL4spfMHy13GhwLHaLnrWMQM9K19OJ2DmsXV1PUqYNRV7mn5YPaqssKo+QtaUYG0UjKCegrdHC4FKNI5hh0B/CsPxJpEPk74kwfaupVQD0FR3SKycgGrTsLlP//Z">
-          <video muted loop playsinline preload="none"
-                 controlslist="nodownload" disablepictureinpicture></video>
-          <span class="label real">Real robot</span>
-          <div class="veil">
-            <div class="lockico">🔒</div>
-            <div class="t">Hardware footage</div>
-            <div class="s">Password required</div>
+    <div class="group-head"><h3>Mobile robots &amp; embedded · Rigbetellabs</h3><span class="ln"></span></div>
+
+    <div class="reel-stage">
+      <div class="reel-head">
+        <h3>Autonomous mobile robots and a record-and-play arm</h3>
+        <p>AMR navigation — autonomous docking and line following — alongside a record-and-play robotic arm that runs entirely on an ESP32, reading joint angles straight off the analog potentiometer inside modified servos.</p>
+      </div>
+      <div class="reel-deck">
+        <div class="reel-item">
+          <div class="clip locked" style="--ar: 368/464" data-enc="videos/amr-docking-line-follower.mp4.enc">
+            <img class="preview" alt="" aria-hidden="true"
+                 src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAwICQsJCAwLCgsODQwOEh4UEhEREiUbHBYeLCcuLisnKyoxN0Y7MTRCNCorPVM+QkhKTk9OLztWXFVMW0ZNTkv/2wBDAQ0ODhIQEiQUFCRLMisyS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0v/wAARCAA9ADADASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDRh02KJ9w60/UbtbK0Zz1xxVgtgZPSsbWIzfYSNuBWFSajZMaVzCh1y4luwAOCa7SEeZChPUiuatdH2TIzYGDXTxEKFA6Cp9rGc0osLMcIqkRAtPBpkmccVsBQuJCENY018IyQo5rS80T4A70j6dE/JFY1aSqblxdjNg1PLcituzl8xA1Vo9MhU5wKtxBE+VCOKilQjTlzIJO6Lyc9KeykDkUlo6q4LdKuXckTKNgrpIMOG2Qn0AqVng+6jgsKoteIw2I3JqOC18li7Nkmq6Be7Jb+48iB2z0FYug3Uk9zIzMSM1L4juPLtSAetVfC6/uy3qaXQZ1sbE4qyEfHINVYGAYE1rLcxGMA4oSEc1LoSo67ZCDVldOkRcM+afaXLzsC+CRV245A5rblRF2cn4g0m5uABHyBRols1rGEcYIroS5LMDWbn9+31rOSsiky4rVIHPrUCVJ2qCj/2Q==">
+            <video muted loop playsinline preload="none" controlslist="nodownload" disablepictureinpicture></video>
+            <span class="label real">Real robot</span>
+            <div class="veil"><div class="lockico">🔒</div><div class="t">Hardware footage</div><div class="s">Password required</div></div>
           </div>
+          <div class="cap">AMR — autonomous docking &amp; line following</div>
+        </div>
+        <div class="reel-item">
+          <div class="clip locked" style="--ar: 478/564" data-enc="videos/record-play-arm.mp4.enc">
+            <img class="preview" alt="" aria-hidden="true"
+                 src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAwICQsJCAwLCgsODQwOEh4UEhEREiUbHBYeLCcuLisnKyoxN0Y7MTRCNCorPVM+QkhKTk9OLztWXFVMW0ZNTkv/2wBDAQ0ODhIQEiQUFCRLMisyS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0v/wAARCAA5ADADASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDikkNXLVvesa3nL9auwzbT1qgOz8NXRW7VM8Vv67fQwR/MwzjpXE6DdiO7DE8Cquvam1xeuNx2ioa1KRZN2hvg54Umu90rUYJYFVHGQK8me5zjPatLQtSeO44Y4oSHJ3M/T/D15I33DW/a+D5ZMGU7a6l9StoDiJBk1fgl86MN60uYEkYVt4YhgTG/5sVn3/g8MjSRPuf0rrZQoUn2rkJ/EMlnqhizlScYpK4zk72xltpTG6kGprCF4WzjrXRawy3c6OY8bu9XbawhESl15p8w+UsDTHMuW4ArZttqRhVOcVR1KaU4WPvT7FXjj+bljUErctXL4QjvivO7+2afXAP9qvQzG2xmb0ripsjVZZR/BQmVY6abTw1pEdoLIKiWcJhWTpVSw1eeSMl/u1qW08E4+bANMaaRLK65Axk1PAAvLdapP/rxVwdBUMER6pfrbW59SK5NkZkllYcvWz4h/wBStZr/APHkKEBHbqyQDA4oa48sVNH/AMewqjc9DTuI/9k=">
+            <video muted loop playsinline preload="none" controlslist="nodownload" disablepictureinpicture></video>
+            <span class="label real">Real robot</span>
+            <div class="veil"><div class="lockico">🔒</div><div class="t">Hardware footage</div><div class="s">Password required</div></div>
+          </div>
+          <div class="cap">Record-and-play arm — ESP32, analog servo feedback</div>
         </div>
       </div>
-
-      <div class="reel-row single">
-        <div class="reel-head">
-          <h3>Custom imitation-learning choreography</h3>
-          <p>A full-length dance sequence learned from human demonstration and replayed on hardware — a stress test for long-horizon whole-body tracking and balance.</p>
-        </div>
-        <div class="clip locked" data-enc="videos/imitation-dance.mp4.enc">
-          <img class="preview" alt="" aria-hidden="true"
-               src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAwICQsJCAwLCgsODQwOEh4UEhEREiUbHBYeLCcuLisnKyoxN0Y7MTRCNCorPVM+QkhKTk9OLztWXFVMW0ZNTkv/2wBDAQ0ODhIQEiQUFCRLMisyS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0v/wAARCABVADADASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDiEhJ6VYFo5GcGrkUKhu1XeVTGBUgY32cilEZQ5rWjtWmbjvTL2xa3Xc1K4LUz/tLkbRUDxu5yRVuwiEsxyOM1sGxTHApg9CnY2Dbt7vwKvXNuGj+9gCqcjyJBlTUkLNMgVm5NOwPUY8jWygwksaLq6kuIf3o7VO9sYYWZsVVhAnBLuMUtWCVipp84SUqRjJroIixizVSPTLYp5qvkilS/CDYF4FOwnqYqasoARjkU6TVY0IKnBFZMdmJMfNV9NPtxGNzZar0sMbdazJOmwMcGks0mEZbnBrXh0OGSNXiIPrWtDobBFBZdvpUtpAYFnqAhiZZDTJLrIJGMVo6toaPIqQsAc81W1XRxBbxqjc45pMasR2+iTc5OKeujrG2ZZ+PrUJvriTq5FKpZ/vMTQm0Dd9WacF3b2MZWMljVJ9Xumn3BiE9Kj2A9qPKHegRHLeTST7wx607UbqWdE2scgVE0iB9tMMgJxQAIKsR4FU1kqQPQBdBpGbiq4l4pDLQArQqW3d6rGPa5OalaWoHl5oAYpp4Y0UUAOyaCaKKAI3Y1AxNFFAH/2Q==">
-          <video muted loop playsinline preload="none"
-                 controlslist="nodownload" disablepictureinpicture></video>
-          <span class="label real">Real robot</span>
-          <div class="veil">
-            <div class="lockico">🔒</div>
-            <div class="t">Hardware footage</div>
-            <div class="s">Password required</div>
-          </div>
-        </div>
-      </div>
-
     </div>
   </section>
 
@@ -469,7 +568,7 @@
           <h3>Robotics Engineer</h3>
           <div class="co">Kayaa</div>
         </div>
-        <div class="meta">Humanoid teleoperation &amp; robot learning</div>
+        <div class="meta">Humanoid teleoperation, robot learning &amp; embodied AI</div>
       </div>
 
       <ul>
@@ -485,6 +584,13 @@
           <p>
             Deployed the stack on <b>Jetson AGX Orin</b> via custom SONIC/TensorRT builds, and developed a
             <b>stereo vision return path</b> (ZED → WebRTC) streaming back to the Meta Quest headset.
+          </p>
+        </li>
+        <li>
+          <p>
+            Architected Kayaa's <b>cognitive architecture</b>, integrating <b>LLM and RAG pipelines</b>
+            for context-aware surgical assistance, and engineered and deployed an end-to-end
+            <b>TTS, LLM and STT conversational AI stack</b> running directly on the Jetson AGX Orin.
           </p>
         </li>
         <li>
@@ -505,10 +611,49 @@
         <span class="pill">Jetson AGX Orin</span>
         <span class="pill">TensorRT</span>
         <span class="pill">WebRTC</span>
+        <span class="pill">LLM + RAG</span>
+        <span class="pill">STT / TTS</span>
         <span class="pill">GR00T N1.7</span>
         <span class="pill">Isaac Sim</span>
         <span class="pill">Isaac Gym</span>
         <span class="pill">MuJoCo</span>
+      </div>
+    </div>
+
+    <div class="xp">
+      <div class="xp-top">
+        <div>
+          <h3>Robotics Engineer</h3>
+          <div class="co">Rigbetellabs</div>
+        </div>
+        <div class="meta">Autonomous mobile robots &amp; embedded systems</div>
+      </div>
+
+      <ul>
+        <li>
+          <p>
+            Built and deployed <b>autonomous mobile robots (AMRs)</b> — including autonomous
+            <b>docking</b> and <b>line-following</b> navigation on real hardware.
+          </p>
+        </li>
+        <li>
+          <p>
+            Built a <b>record-and-play robotic arm</b> from scratch, running entirely on an
+            <b>ESP32</b> — no host PC in the loop. With no encoders available, I modified the
+            servos and tapped their internal <b>analog potentiometer</b> directly to read joint
+            angles, turning a position-only actuator into a teach-by-demonstration joint.
+          </p>
+        </li>
+      </ul>
+
+      <div class="stack">
+        <span class="pill">AMR</span>
+        <span class="pill">Autonomous docking</span>
+        <span class="pill">Line following</span>
+        <span class="pill">ESP32</span>
+        <span class="pill">Embedded C</span>
+        <span class="pill">Servo feedback</span>
+        <span class="pill">ROS</span>
       </div>
     </div>
   </section>
@@ -539,11 +684,25 @@
         </div>
       </div>
       <div class="skill">
+        <h3>Embodied &amp; Conversational AI</h3>
+        <div class="pills">
+          <span class="pill">LLM pipelines</span><span class="pill">RAG</span>
+          <span class="pill">STT / TTS</span><span class="pill">On-device inference</span>
+        </div>
+      </div>
+      <div class="skill">
         <h3>Perception &amp; Navigation</h3>
         <div class="pills">
           <span class="pill">LiDAR SLAM</span><span class="pill">FAST-LIO</span>
           <span class="pill">ZED stereo</span><span class="pill">Pose estimation</span>
           <span class="pill">A* planning</span><span class="pill">ROS 2</span>
+        </div>
+      </div>
+      <div class="skill">
+        <h3>Embedded Systems</h3>
+        <div class="pills">
+          <span class="pill">ESP32</span><span class="pill">Embedded C</span>
+          <span class="pill">Servo &amp; motor control</span><span class="pill">Sensor interfacing</span>
         </div>
       </div>
       <div class="skill">
@@ -597,17 +756,21 @@
   });
 
   /* ---------- play clips only while visible ---------- */
+  var io = null;
   if ("IntersectionObserver" in window) {
-    var io = new IntersectionObserver(function (entries) {
+    io = new IntersectionObserver(function (entries) {
       entries.forEach(function (e) {
         var v = e.target;
         if (!v.src) return;
-        if (e.isIntersecting) { var p = v.play(); if (p) p.catch(function () {}); }
-        else v.pause();
+        if (e.isIntersecting) {
+          var p = v.play();
+          if (p) p.catch(function () {});
+        } else {
+          v.pause();
+        }
       });
     }, { threshold: 0.25 });
     document.querySelectorAll(".clip video").forEach(function (v) { io.observe(v); });
-    window.__clipObserver = io;
   }
 
   /* ---------- discourage casual saving ---------- */
@@ -615,8 +778,17 @@
     c.addEventListener("contextmenu", function (e) { e.preventDefault(); });
   });
 
+  /* ---------- sound toggles ---------- */
+  document.querySelectorAll(".sound-btn").forEach(function (b) {
+    b.addEventListener("click", function () {
+      var v = b.parentElement.querySelector("video");
+      v.muted = !v.muted;
+      b.textContent = v.muted ? "🔇" : "🔊";
+    });
+  });
+
   /* ---------- unlock hardware footage ---------- */
-  /* Files are AES-256-GCM; the key is PBKDF2-SHA256(password, salt, 600k).
+  /* Files are AES-256-GCM; key = PBKDF2-SHA256(password, salt, 600k).
      Layout per file: salt(16) || iv(12) || ciphertext+tag                */
   var ITER = 600000;
   var form = document.getElementById("unlockBar");
@@ -646,21 +818,19 @@
   }
 
   function unlockOne(clip, password) {
-    var url = clip.getAttribute("data-enc");
     clip.classList.add("working");
     clip.querySelector(".veil .s").textContent = "Decrypting";
-    return fetch(url)
+    return fetch(clip.getAttribute("data-enc"))
       .then(function (r) {
         if (!r.ok) throw new Error("fetch failed");
         return r.arrayBuffer();
       })
       .then(function (buf) {
         var bytes = new Uint8Array(buf);
-        var salt = bytes.slice(0, 16);
-        var iv = bytes.slice(16, 28);
-        var body = bytes.slice(28);
-        return deriveKey(password, salt).then(function (key) {
-          return crypto.subtle.decrypt({ name: "AES-GCM", iv: iv }, key, body);
+        return deriveKey(password, bytes.slice(0, 16)).then(function (key) {
+          return crypto.subtle.decrypt(
+            { name: "AES-GCM", iv: bytes.slice(16, 28) }, key, bytes.slice(28)
+          );
         });
       })
       .then(function (plain) {
@@ -669,8 +839,22 @@
         video.setAttribute("controls", "");
         clip.classList.remove("locked", "working");
         clip.classList.add("unlocked");
-        if (window.__clipObserver) window.__clipObserver.observe(video);
-        var p = video.play(); if (p) p.catch(function () {});
+        if (clip.dataset.reveal) clip.classList.add("revealing");
+
+        /* the unlock click counts as a user gesture, so sound is allowed here */
+        if (clip.dataset.audio) {
+          var sb = clip.querySelector(".sound-btn");
+          video.muted = false;
+          video.volume = 1;
+          if (sb) { sb.classList.add("on"); sb.textContent = "🔊"; }
+          video.play().catch(function () {
+            /* browser refused audio -- fall back to muted and let them opt in */
+            video.muted = true;
+            if (sb) sb.textContent = "🔇";
+            video.play().catch(function () {});
+          });
+        }
+        if (io) io.observe(video);
       });
   }
 
