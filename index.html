@@ -325,15 +325,16 @@
   /* horizontal scrolling carousel variant */
   .reel-deck.carousel {
     display: flex; overflow-x: auto; scroll-snap-type: x mandatory;
-    gap: 1.2rem; padding-bottom: 0.6rem;
+    gap: 1.5rem; padding: 0.5rem 0.2rem 1.2rem;
     -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
     scrollbar-width: thin; scrollbar-color: var(--border) transparent;
   }
-  .reel-deck.carousel::-webkit-scrollbar { height: 5px; }
+  .reel-deck.carousel::-webkit-scrollbar { height: 6px; }
   .reel-deck.carousel::-webkit-scrollbar-track { background: transparent; }
   .reel-deck.carousel::-webkit-scrollbar-thumb { background: var(--border); border-radius: 99px; }
   .reel-deck.carousel > .reel-item {
-    flex: 0 0 min(300px, 80vw); scroll-snap-align: start;
+    flex: 0 0 min(330px, 80vw); scroll-snap-align: start;
   }
   .reel-single { width: 100%; }
   @media (max-width: 860px) {
@@ -663,9 +664,9 @@
       </div>
       <div class="reel-deck carousel">
         <div class="reel-item">
-          <div class="clip locked" style="--ar: 4/3" data-enc="videos/amr-outdoor-gps.mp4.enc">
+          <div class="clip locked" style="--ar: 9/16" data-enc="videos/amr-outdoor-gps.mp4.enc">
             <img class="preview" alt="" aria-hidden="true"
-                 src="data:image/jpeg;base64,/9j//gAQTGF2YzYwLjMxLjEwMgD/2wBDAAgQEBMQExYWFhYWFhoYGhsbGxoaGhobGxsdHR0iIiIdHR0bGx0dICAiIiUmJSMjIiMmJigoKDAwLi44ODpFRVP/xAB2AAADAAMBAQEAAAAAAAAAAAAEAgMFBwYBAAgBAAMBAQEAAAAAAAAAAAAAAAADBAUCARAAAQMEAQMEAwEBAAAAAAAAAQACESEDMRIEYUFRgXEikTITBXKCEQEBAAICAgMBAAAAAAAAAAAAAQIRAyETMRJRFIH/wAARCABWADADASIAAhEAAxEA/9oADAMBAAIRAxEAPwDYEQmkHuqabBS/X4K0nGLABTxCEjXJVNgUA26bK8ookoDnB/X4cNJua7TQtM08xjos3b5Vm8ze25rwMmYj3nHqvzq5j3RgQIyjg66yAw6ggB4n8j18hcvki9NyHn8YuguJ/wANJH2j7XJ49wlrLlRBg0NehWpLfIkfJsEeMIQOttfsNgf+qpXlu/TY/PxXGXHllt97smv57b2OvlBOusaYkLUt3+hyiAG3fjEYbPqTVcu99wjUnvJk1J+5TpySszPjuGVl119MoAT2VNW+yqwwpPHcQuM8Pc+DZysbxjJd1qq3j+trdbwebgJLQKNEYjMzPohuJDXEupIgDyruOpUdWs3CTQomikaJXS/jCNkd1VzSUHbcj5moCY8jlbvHfNMJLVl7XAk0XTvUA0EI2rQcOc1Eh4cF5PYhCObqZ7dFK02OgrLMuagysGEc0j3VlDSZUsK4UnBStI4UxI6pkK9xahRGtkZTtKa3+JSNyrLZRpleOEr5mVQ5UGAogqTqog5UCvQ//9k=">
+                 src="data:image/jpeg;base64,/9j//gAQTGF2YzYwLjMxLjEwMgD/2wBDAAgQEBMQExYWFhYWFhoYGhsbGxoaGhobGxsdHR0iIiIdHR0bGx0dICAiIiUmJSMjIiMmJigoKDAwLi44ODpFRVP/xAB2AAADAAMBAQEAAAAAAAAAAAAEAgMFBwYBAAgBAAMBAQEAAAAAAAAAAAAAAAADBAUCARAAAQMEAQMEAwEBAAAAAAAAAQACESEDMRIEYUFRgXEikTITBXKCEQEBAAICAgMBAAAAAAAAAAAAAQIRAyETMRJRFIH/wAARCABWADADASIAAhEAAxEA/9oADAMBAAIRAxEAPwDYEQmkHuqabBS/X4K0nGLABTxCEjXJVNgUA26bK8ookoDnB/X4cNJua7TQtM08xjos3b5Vm8ze25rwMmYj3nHqvzq5j3RgQIyjg66yAw6ggB4n8j18hcvki9NyHn8YuguJ/wANJH2j7XJ49wlrLlRBg0NehWpLfIkfJsEeMIQOttfsNgf+qpXlu/TY/PxXGXHllt97smv57b2OvlBOusaYkLUt3+hyiAG3fjEYbPqTVcu99wjUnvJk1J+5TpySszPjuGVl119MoAT2VNW+yqwwpPHcQuM8Pc+DZysbxjJd1qq3j+trdbwebgJLQKNEYjMzPohuJDXEupIgDyruOpUdWs3CTQomikaJXS/jCNkd1VzSUHbcj5moCY8jlbvHfNMJLVl7XAk0XTvUA0EI2rQcOc1Eh4cF5PYhCObqZ7dFC02OgrLMuagysGEc0j3VlDSZUsK4UnBStI4UxI6pkK9xahRGtkZTtKa3+JSNyrLZRpleOEr5mVQ5UGAogqTqog5UCvQ//9k=">
             <video muted loop playsinline preload="none" controlslist="nodownload" disablepictureinpicture></video>
             <span class="label real">Real robot</span>
             <div class="veil"><div class="lockico">🔒</div><div class="t">Hardware footage</div><div class="s">Password required</div></div>
@@ -673,7 +674,7 @@
           <div class="cap">Outdoor GPS-Fused AMR Autonomous Navigation (ROS 2 NAV2 + PX4)</div>
         </div>
         <div class="reel-item">
-          <div class="clip locked" style="--ar: 4/3" data-enc="videos/amr-docking-line-follower.mp4.enc">
+          <div class="clip locked" style="--ar: 9/16" data-enc="videos/amr-docking-line-follower.mp4.enc">
             <img class="preview" alt="" aria-hidden="true"
                  src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAwICQsJCAwLCgsODQwOEh4UEhEREiUbHBYeLCcuLisnKyoxN0Y7MTRCNCorPVM+QkhKTk9OLztWXFVMW0ZNTkv/2wBDAQ0ODhIQEiQUFCRLMisyS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0v/wAARCAA9ADADASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDRh02KJ9w60/UbtbK0Zz1xxVgtgZPSsbWIzfYSNuBWFSajZMaVzCh1y4luwAOCa7SEeZChPUiuatdH2TIzYGDXTxEKFA6Cp9rGc0osLMcIqkRAtPBpkmccVsBQuJCENY018IyQo5rS80T4A70j6dE/JFY1aSqblxdjNg1PLcituzl8xA1Vo9MhU5wKtxBE+VCOKilQjTlzIJO6Lyc9KeykDkUlo6q4LdKuXckTKNgrpIMOG2Qn0AqVng+6jgsKoteIw2I3JqOC18li7Nkmq6Be7Jb+48iB2z0FYug3Uk9zIzMSM1L4juPLtSAetVfC6/uy3qaXQZ1sbE4qyEfHINVYGAYE1rLcxGMA4oSEc1LoSo67ZCDVldOkRcM+afaXLzsC+CRV245A5rblRF2cn4g0m5uABHyBRols1rGEcYIroS5LMDWbn9+31rOSsiky4rVIHPrUCVJ2qCj/2Q==">
             <video muted loop playsinline preload="none" controlslist="nodownload" disablepictureinpicture></video>
@@ -683,7 +684,7 @@
           <div class="cap">AMR — autonomous docking &amp; line following</div>
         </div>
         <div class="reel-item">
-          <div class="clip locked" style="--ar: 4/3" data-enc="videos/record-play-arm.mp4.enc">
+          <div class="clip locked" style="--ar: 9/16" data-enc="videos/record-play-arm.mp4.enc">
             <img class="preview" alt="" aria-hidden="true"
                  src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAwICQsJCAwLCgsODQwOEh4UEhEREiUbHBYeLCcuLisnKyoxN0Y7MTRCNCorPVM+QkhKTk9OLztWXFVMW0ZNTkv/2wBDAQ0ODhIQEiQUFCRLMisyS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0v/wAARCAA5ADADASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDikkNXLVvesa3nL9auwzbT1qgOz8NXRW7VM8Vv67fQwR/MwzjpXE6DdiO7DE8Cquvam1xeuNx2ioa1KRZN2hvg54Umu90rUYJYFVHGQK8me5zjPatLQtSeO44Y4oSHJ3M/T/D15I33DW/a+D5ZMGU7a6l9StoDiJBk1fgl86MN60uYEkYVt4YhgTG/5sVn3/g8MjSRPuf0rrZQoUn2rkJ/EMlnqhizlScYpK4zk72xltpTG6kGprCF4WzjrXRawy3c6OY8bu9XbawhESl15p8w+UsDTHMuW4ArZttqRhVOcVR1KaU4WPvT7FXjj+bljUErctXL4QjvivO7+2afXAP9qvQzG2xmb0ripsjVZZR/BQmVY6abTw1pEdoLIKiWcJhWTpVSw1eeSMl/u1qW08E4+bANMaaRLK65Axk1PAAvLdapP/rxVwdBUMER6pfrbW59SK5NkZkllYcvWz4h/BStZr/APHkKEBHbqyQDA4oa48sVNH/AMewqjc9DTuI/9k=">
             <video muted loop playsinline preload="none" controlslist="nodownload" disablepictureinpicture></video>
@@ -974,6 +975,41 @@
     var next = currentTheme() === "dark" ? "light" : "dark";
     root.setAttribute("data-theme", next);
     localStorage.setItem("theme", next);
+  });
+
+  /* ---------- auto-sliding carousel ---------- */
+  document.querySelectorAll(".reel-deck.carousel").forEach(function (deck) {
+    var autoTimer = null;
+    var isHovered = false;
+
+    function getNextScroll() {
+      var maxScroll = deck.scrollWidth - deck.clientWidth;
+      var item = deck.querySelector(".reel-item");
+      var itemWidth = item ? item.offsetWidth + 24 : 350;
+      var next = deck.scrollLeft + itemWidth;
+      if (next >= maxScroll - 10) {
+        return 0;
+      }
+      return next;
+    }
+
+    function step() {
+      if (isHovered) return;
+      deck.scrollTo({ left: getNextScroll(), behavior: "smooth" });
+    }
+
+    function startAuto() {
+      if (!autoTimer) autoTimer = setInterval(step, 3500);
+    }
+
+    deck.addEventListener("mouseenter", function () { isHovered = true; });
+    deck.addEventListener("mouseleave", function () { isHovered = false; });
+    deck.addEventListener("touchstart", function () { isHovered = true; }, { passive: true });
+    deck.addEventListener("touchend", function () {
+      setTimeout(function () { isHovered = false; }, 3000);
+    }, { passive: true });
+
+    startAuto();
   });
 
   /* ---------- play clips only while visible ---------- */
