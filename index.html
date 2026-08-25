@@ -321,6 +321,20 @@
   .reel-deck .cap {
     text-align: center; font-size: 0.82rem; color: var(--text-2); margin-top: 0.6rem;
   }
+
+  /* horizontal scrolling carousel variant */
+  .reel-deck.carousel {
+    display: flex; overflow-x: auto; scroll-snap-type: x mandatory;
+    gap: 1.2rem; padding-bottom: 0.6rem;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin; scrollbar-color: var(--border) transparent;
+  }
+  .reel-deck.carousel::-webkit-scrollbar { height: 5px; }
+  .reel-deck.carousel::-webkit-scrollbar-track { background: transparent; }
+  .reel-deck.carousel::-webkit-scrollbar-thumb { background: var(--border); border-radius: 99px; }
+  .reel-deck.carousel > .reel-item {
+    flex: 0 0 min(300px, 80vw); scroll-snap-align: start;
+  }
   .reel-single { width: 100%; }
   @media (max-width: 860px) {
     .reel-stage { grid-template-columns: 1fr; gap: 1.4rem; }
@@ -647,7 +661,7 @@
         <h3>Autonomous mobile robots &amp; embedded control</h3>
         <p>Outdoor GPS-fused autonomous AMR navigation (PX4 + ROS 2 NAV2), indoor docking &amp; line following, and a record-and-play robotic arm built on an ESP32.</p>
       </div>
-      <div class="reel-deck">
+      <div class="reel-deck carousel">
         <div class="reel-item">
           <div class="clip" style="--ar: 4/3">
             <video src="videos/amr-outdoor-gps.mp4" autoplay muted loop playsinline preload="metadata" controlslist="nodownload" disablepictureinpicture></video>
