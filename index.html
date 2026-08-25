@@ -505,11 +505,10 @@
     <div class="hero-grid">
       <div>
         <div class="status">Robotics Engineer</div>
-        <h1>Humanoid autonomy, <em>perception to torque</em>.</h1>
+        <h1>Robotics Engineer, <em>perception, control &amp; autonomy</em>.</h1>
         <p class="lede">
-          Simulation, teleoperation and policy deployment on the 29-DoF Unitree G1
-          at SS Innovations — trained in Isaac Sim and MuJoCo, validated on hardware.
-          Previously mobile robots and embedded systems at Rigbetellabs.
+          Building end-to-end autonomous systems — from LiDAR SLAM, GPS navigation, and visual servoing to whole-body control, simulation (Isaac Sim, MuJoCo), embedded firmware, and policy deployment.
+          Currently Robotics R&amp;D Engineer at SS Innovations; previously mobile robotics at Rigbetellabs.
         </p>
         <div class="hero-actions">
           <a class="btn primary" href="#work">Watch the demos</a>
@@ -527,10 +526,10 @@
     </div>
 
     <div class="metrics">
-      <div class="metric"><div class="v">0.7 <span>cm</span></div><div class="k">Wrist accuracy</div></div>
-      <div class="metric"><div class="v">29 <span>DoF</span></div><div class="k">Whole-body control</div></div>
-      <div class="metric"><div class="v">1 <span>kHz</span></div><div class="k">Motor command rate</div></div>
-      <div class="metric"><div class="v">~130 <span>ms</span></div><div class="k">Photon → motion</div></div>
+      <div class="metric"><div class="v">ROS 2 <span>NAV2</span></div><div class="k">Autonomous Navigation</div></div>
+      <div class="metric"><div class="v">GPS + LiDAR</div><div class="k">Sensor Fusion SLAM</div></div>
+      <div class="metric"><div class="v">1 <span>kHz</span></div><div class="k">Real-time Motor Loop</div></div>
+      <div class="metric"><div class="v">Sim-to-Real</div><div class="k">Isaac Sim &amp; Hardware</div></div>
     </div>
   </section>
 
@@ -637,20 +636,23 @@
         <div class="notes">
           <span class="pill">24 s continuous</span>
           <span class="pill">Whole-body tracking</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="group-head"><h3>Mobile robots &amp; embedded · Rigbetellabs</h3><span class="ln"></span></div>
+        <div class="group-head"><h3>Mobile robots &amp; embedded · Rigbetellabs</h3><span class="ln"></span></div>
 
     <div class="reel-stage duo">
       <div class="reel-head">
-        <h3>Mobile robots and a record-and-play arm</h3>
-        <p>AMR navigation — docking and line following — and an arm that records and replays trajectories entirely on an ESP32.</p>
+        <h3>Autonomous mobile robots &amp; embedded control</h3>
+        <p>Outdoor GPS-fused autonomous AMR navigation (PX4 + ROS 2 NAV2), indoor docking &amp; line following, and a record-and-play robotic arm built on an ESP32.</p>
       </div>
       <div class="reel-deck">
         <div class="reel-item">
-          <div class="clip locked" style="--ar: 4/5" data-enc="videos/amr-docking-line-follower.mp4.enc">
+          <div class="clip" style="--ar: 4/3">
+            <video src="videos/amr-outdoor-gps.mp4" autoplay muted loop playsinline preload="metadata" controlslist="nodownload" disablepictureinpicture></video>
+            <span class="label real">Real robot</span>
+          </div>
+          <div class="cap">Outdoor GPS-Fused AMR Autonomous Navigation (ROS 2 NAV2 + PX4)</div>
+        </div>
+        <div class="reel-item">
+          <div class="clip locked" style="--ar: 4/3" data-enc="videos/amr-docking-line-follower.mp4.enc">
             <img class="preview" alt="" aria-hidden="true"
                  src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAwICQsJCAwLCgsODQwOEh4UEhEREiUbHBYeLCcuLisnKyoxN0Y7MTRCNCorPVM+QkhKTk9OLztWXFVMW0ZNTkv/2wBDAQ0ODhIQEiQUFCRLMisyS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0v/wAARCAA9ADADASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDRh02KJ9w60/UbtbK0Zz1xxVgtgZPSsbWIzfYSNuBWFSajZMaVzCh1y4luwAOCa7SEeZChPUiuatdH2TIzYGDXTxEKFA6Cp9rGc0osLMcIqkRAtPBpkmccVsBQuJCENY018IyQo5rS80T4A70j6dE/JFY1aSqblxdjNg1PLcituzl8xA1Vo9MhU5wKtxBE+VCOKilQjTlzIJO6Lyc9KeykDkUlo6q4LdKuXckTKNgrpIMOG2Qn0AqVng+6jgsKoteIw2I3JqOC18li7Nkmq6Be7Jb+48iB2z0FYug3Uk9zIzMSM1L4juPLtSAetVfC6/uy3qaXQZ1sbE4qyEfHINVYGAYE1rLcxGMA4oSEc1LoSo67ZCDVldOkRcM+afaXLzsC+CRV245A5rblRF2cn4g0m5uABHyBRols1rGEcYIroS5LMDWbn9+31rOSsiky4rVIHPrUCVJ2qCj/2Q==">
             <video muted loop playsinline preload="none" controlslist="nodownload" disablepictureinpicture></video>
@@ -660,15 +662,39 @@
           <div class="cap">AMR — autonomous docking &amp; line following</div>
         </div>
         <div class="reel-item">
-          <div class="clip locked" style="--ar: 4/5" data-enc="videos/record-play-arm.mp4.enc">
+          <div class="clip locked" style="--ar: 4/3" data-enc="videos/record-play-arm.mp4.enc">
             <img class="preview" alt="" aria-hidden="true"
-                 src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAwICQsJCAwLCgsODQwOEh4UEhEREiUbHBYeLCcuLisnKyoxN0Y7MTRCNCorPVM+QkhKTk9OLztWXFVMW0ZNTkv/2wBDAQ0ODhIQEiQUFCRLMisyS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0v/wAARCAA5ADADASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDikkNXLVvesa3nL9auwzbT1qgOz8NXRW7VM8Vv67fQwR/MwzjpXE6DdiO7DE8Cquvam1xeuNx2ioa1KRZN2hvg54Umu90rUYJYFVHGQK8me5zjPatLQtSeO44Y4oSHJ3M/T/D15I33DW/a+D5ZMGU7a6l9StoDiJBk1fgl86MN60uYEkYVt4YhgTG/5sVn3/g8MjSRPuf0rrZQoUn2rkJ/EMlnqhizlScYpK4zk72xltpTG6kGprCF4WzjrXRawy3c6OY8bu9XbawhESl15p8w+UsDTHMuW4ArZttqRhVOcVR1KaU4WPvT7FXjj+bljUErctXL4QjvivO7+2afXAP9qvQzG2xmb0ripsjVZZR/BQmVY6abTw1pEdoLIKiWcJhWTpVSw1eeSMl/u1qW08E4+bANMaaRLK65Axk1PAAvLdapP/rxVwdBUMER6pfrbW59SK5NkZkllYcvWz4h/wBStZr/APHkKEBHbqyQDA4oa48sVNH/AMewqjc9DTuI/9k=">
+                 src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAwICQsJCAwLCgsODQwOEh4UEhEREiUbHBYeLCcuLisnKyoxN0Y7MTRCNCorPVM+QkhKTk9OLztWXFVMW0ZNTkv/2wBDAQ0ODhIQEiQUFCRLMisyS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0v/wAARCAA5ADADASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDikkNXLVvesa3nL9auwzbT1qgOz8NXRW7VM8Vv67fQwR/MwzjpXE6DdiO7DE8Cquvam1xeuNx2ioa1KRZN2hvg54Umu90rUYJYFVHGQK8me5zjPatLQtSeO44Y4oSHJ3M/T/D15I33DW/a+D5ZMGU7a6l9StoDiJBk1fgl86MN60uYEkYVt4YhgTG/5sVn3/g8MjSRPuf0rrZQoUn2rkJ/EMlnqhizlScYpK4zk72xltpTG6kGprCF4WzjrXRawy3c6OY8bu9XbawhESl15p8w+UsDTHMuW4ArZttqRhVOcVR1KaU4WPvT7FXjj+bljUErctXL4QjvivO7+2afXAP9qvQzG2xmb0ripsjVZZR/BQmVY6abTw1pEdoLIKiWcJhWTpVSw1eeSMl/u1qW08E4+bANMaaRLK65Axk1PAAvLdapP/rxVwdBUMER6pfrbW59SK5NkZkllYcvWz4h/BStZr/APHkKEBHbqyQDA4oa48sVNH/AMewqjc9DTuI/9k=">
             <video muted loop playsinline preload="none" controlslist="nodownload" disablepictureinpicture></video>
             <span class="label real">Real robot</span>
             <div class="veil"><div class="lockico">🔒</div><div class="t">Hardware footage</div><div class="s">Password required</div></div>
           </div>
           <div class="cap">Record-and-play arm — ESP32, analog servo feedback</div>
         </div>
+      </div>
+    </div>
+
+    <div class="group-head"><h3>Research &amp; College Projects · CAS AKTU &amp; e-Yantra (IIT Bombay)</h3><span class="ln"></span></div>
+
+    <div class="reel-stage duo">
+      <div class="reel-head">
+        <h3>Swarm robotics &amp; visual servoing</h3>
+        <p>Research paper published in Springer AJSE on XGBoost-enhanced optical light communication for swarm robots, and an overhead visual servoing system for autonomous mobile navigation (IIT Bombay e-Yantra Top 30).</p>
+      </div>
+      <div class="reel-deck">
+        <div class="reel-item">
+          <div class="clip" style="--ar: 4/3">
+            <video src="videos/swarmrobots.mp4" autoplay muted loop playsinline preload="metadata" controlslist="nodownload" disablepictureinpicture></video>
+            <span class="label sim">Research Demo</span>
+          </div>
+          <div class="cap">XGBoost Color-Light Communication Swarm Robotics (Springer AJSE)</div>
+        </div>
+        <div class="reel-item">
+          <div class="clip" style="--ar: 4/3">
+            <video src="videos/visualservoing-vanguard.mp4" autoplay muted loop playsinline preload="metadata" controlslist="nodownload" disablepictureinpicture></video>
+            <span class="label real">Real robot</span>
+          </div>
+          <div class="cap">Vanguard — Overhead Camera Visual Servoing (eYRC 2023-24 Top 30)</div>
       </div>
     </div>
   </section>
@@ -742,32 +768,72 @@
     <div class="xp">
       <div class="xp-top">
         <div>
-          <h3>Robotics Engineer</h3>
-          <div class="co">Rigbetellabs</div>
+          <h3>Robotics Engineer (Firmware &amp; Autonomy)</h3>
+          <div class="co">RigBetel Labs — Pune</div>
         </div>
-        <div class="meta">Mobile robots &amp; embedded systems</div>
+        <div class="meta">AMRs, UGVs, PX4 &amp; embedded systems · May 2024 – June 2025</div>
       </div>
 
       <ul>
         <li>
           <p>
-            Autonomous mobile robots: docking and line-following navigation.
+            Integrated PX4 for UGVs with GPS-based outdoor autonomous navigation and IMU/GPS/vision sensor fusion; shipped full ROS 2 + NAV2 autonomous navigation stacks for AMRs tied into real-time embedded firmware.
           </p>
         </li>
         <li>
           <p>
-            A record-and-play arm running entirely on an ESP32. With no encoders available,
-            I modified the servos to tap their internal potentiometer for joint feedback,
-            which made position-only actuators readable enough to teach by demonstration.
+            Wrote low- and high-level ROS 2 drivers (SPI, I2C, UART, CAN) for LiDARs, IMUs, and motor controllers; built a C++ motor controller with a low-level PID loop, Kalman-filter IMU+encoder odometry, and live tuning GUI.
+          </p>
+        </li>
+        <li>
+          <p>
+            Developed a robotic arm "Record &amp; Play" mode using drive servos as position feedback sensors (tapping internal potentiometers), avoiding external encoders. Migrated legacy firmware to Micro-ROS.
           </p>
         </li>
       </ul>
 
       <div class="stack">
-        <span class="pill">AMR</span>
+        <span class="pill">ROS 2 NAV2</span>
+        <span class="pill">PX4 UGV</span>
+        <span class="pill">GPS Waypoint Nav</span>
+        <span class="pill">AMR Docking</span>
         <span class="pill">ESP32</span>
-        <span class="pill">Embedded C</span>
-        <span class="pill">ROS</span>
+        <span class="pill">C++ Motor Control</span>
+        <span class="pill">Kalman Filter</span>
+        <span class="pill">RTOS</span>
+      </div>
+    </div>
+
+    <div class="xp">
+      <div class="xp-top">
+        <div>
+          <h3>Mechatronics Research Intern</h3>
+          <div class="co">Centre For Advanced Studies, AKTU — Lucknow</div>
+        </div>
+        <div class="meta">Swarm Robotics &amp; Visual Servoing · June 2022 – Dec 2023</div>
+      </div>
+
+      <ul>
+        <li>
+          <p>
+            Research under Dr. Anuj Kumar Sharma: Built an optical color-light communication system for miniature swarm robots using XGBoost on 32-bit MCUs (96.66% accuracy at 0.403 ms execution), published in <em>Springer Arabian Journal for Science and Engineering</em>.
+          </p>
+        </li>
+        <li>
+          <p>
+            Led the "Vanguard" team in IIT Bombay's e-Yantra Robotics Competition (eYRC 2023-24, Top 30 in India): Designed an overhead camera visual-servoing system with OpenCV for real-time target tracking and autonomous two-wheeled robot control.
+          </p>
+        </li>
+      </ul>
+
+      <div class="stack">
+        <span class="pill">Swarm Robotics</span>
+        <span class="pill">Springer AJSE</span>
+        <span class="pill">Visual Servoing</span>
+        <span class="pill">OpenCV</span>
+        <span class="pill">XGBoost MCU</span>
+        <span class="pill">e-Yantra IIT Bombay</span>
+        <span class="pill">MQTT</span>
       </div>
     </div>
   </section>
